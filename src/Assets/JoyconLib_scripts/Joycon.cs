@@ -69,6 +69,7 @@ public class Joycon
     private bool first_imu_packet = true;
     private bool imu_enabled = false;
     private Int16[] acc_r = { 0, 0, 0 };
+    private Int16[] acc_neutral = { 0, 0, 0 };
     private Vector3 acc_g;
 
     private Int16[] gyr_r = { 0, 0, 0 };
@@ -232,6 +233,12 @@ public class Joycon
     {
         return acc_g;
     }
+    
+    public Vector3 GetAccelRaw()// 生データ(補正済)の値を取得
+    {
+        return new Vector3(acc_r[0] - acc_neutral[0], acc_r[1] - acc_neutral[1], acc_r[2] - acc_neutral[2]);
+    }
+
     public Quaternion GetVector()
     {
         Vector3 v1 = new Vector3(j_b.x, i_b.x, k_b.x);
@@ -433,6 +440,13 @@ public class Joycon
     }
     private void ExtractIMUValues(byte[] report_buf, int n = 0)
     {
+        /* 加速度の補正値取得 */
+        byte[] buf_ = ReadSPI(0x80, 0x28, 10);
+        acc_neutral[0] = (Int16)(buf_[0] | ((buf_[1] << 8)) & 0xff00);
+        acc_neutral[1] = (Int16)(buf_[2] | ((buf_[3] << 8)) & 0xff00);
+        acc_neutral[2] = (Int16)(buf_[4] | ((buf_[5] << 8)) & 0xff00);
+        PrintArray(acc_neutral, len: 3, d: DebugType.IMU, format: "User accle neutral position: {0:5}");
+
         gyr_r[0] = (Int16)(report_buf[19 + n * 12] | ((report_buf[20 + n * 12] << 8) & 0xff00));
         gyr_r[1] = (Int16)(report_buf[21 + n * 12] | ((report_buf[22 + n * 12] << 8) & 0xff00));
         gyr_r[2] = (Int16)(report_buf[23 + n * 12] | ((report_buf[24 + n * 12] << 8) & 0xff00));
@@ -441,7 +455,7 @@ public class Joycon
         acc_r[2] = (Int16)(report_buf[17 + n * 12] | ((report_buf[18 + n * 12] << 8) & 0xff00));
         for (int i = 0; i < 3; ++i)
         {
-            acc_g[i] = acc_r[i] * 0.00025f;
+            acc_g[i] = (acc_r[i] - acc_neutral[i]) * 0.00025f;
 
             /* https://hoshi.903.ch/blog/20201218_vctl/を参考にジャイロのノイズ対策を実装 */
             UInt16 gyr_threhold = 9;// ジャイロを検知するしきい値を設定（大体ノイズは±4までだが、一度で確実に補正したいので2倍にしている）
