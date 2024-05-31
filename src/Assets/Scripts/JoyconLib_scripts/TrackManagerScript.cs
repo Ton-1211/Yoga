@@ -65,7 +65,7 @@ public class TrackManagerScript : MonoBehaviour
 
         foreach (TrackPoint trackPoint in trackPoints)
         {
-            Vector3 moveAmount = trackPoint.TrackJoycon.GetAccel() * Time.deltaTime * Time.deltaTime;
+            Vector3 moveAmount = trackPoint.TrackJoycon.GetAccel() * Time.deltaTime * Time.deltaTime * 1000f;// ”š‚ÍŒã‚Å•Ï”‚É‚·‚é
 
             trackPoint.AddPosition(moveAmount);
         }
