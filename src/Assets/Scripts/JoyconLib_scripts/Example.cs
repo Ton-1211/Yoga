@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-/* https://www.mof-mof.co.jp/tech-blog/unity-joycon-introduce‚ÌƒXƒNƒŠƒvƒg‚ğ‚à‚Æ‚É‚µ‚Ä‚¢‚é */
+/* https://www.mof-mof.co.jp/tech-blog/unity-joycon-introduceï¿½ÌƒXï¿½Nï¿½ï¿½ï¿½vï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Æ‚É‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ */
 
 [Serializable] class TrackPoint
 {
-    [Header("ƒgƒ‰ƒbƒLƒ“ƒO‚Å“®‚©‚·ƒIƒuƒWƒFƒNƒg"), SerializeField] Transform TrackTransform;
+    [Header("ï¿½gï¿½ï¿½ï¿½bï¿½Lï¿½ï¿½ï¿½Oï¿½Å“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½g"), SerializeField] Transform TrackTransform;
     public Joycon TrackJoycon { get; set; }
 
     public Transform GetTransform() { return TrackTransform; }
@@ -82,19 +82,19 @@ public class Example : MonoBehaviour
 
         if (m_joycons == null || m_joycons.Count <= 0)
         {
-            GUILayout.Label("Joy-Con ‚ªÚ‘±‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+            GUILayout.Label("Joy-Con ï¿½ï¿½ï¿½Ú‘ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½");
             return;
         }
 
         if (!m_joycons.Any(c => c.isLeft))
         {
-            GUILayout.Label("Joy-Con (L) ‚ªÚ‘±‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+            GUILayout.Label("Joy-Con (L) ï¿½ï¿½ï¿½Ú‘ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½");
             return;
         }
 
         if (!m_joycons.Any(c => !c.isLeft))
         {
-            GUILayout.Label("Joy-Con (R) ‚ªÚ‘±‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+            GUILayout.Label("Joy-Con (R) ï¿½ï¿½ï¿½Ú‘ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½");
             return;
         }
 
@@ -104,7 +104,7 @@ public class Example : MonoBehaviour
         {
             var isLeft = joycon.isLeft;
             var name = isLeft ? "Joy-Con (L)" : "Joy-Con (R)";
-            var key = isLeft ? "Z ƒL[" : "X ƒL[";
+            var key = isLeft ? "Z ï¿½Lï¿½[" : "X ï¿½Lï¿½[";
             var button = isLeft ? m_pressedButtonL : m_pressedButtonR;
             var stick = joycon.GetStick();
             var gyro = joycon.GetGyro();
@@ -114,13 +114,13 @@ public class Example : MonoBehaviour
 
             GUILayout.BeginVertical(GUILayout.Width(480));
             GUILayout.Label(name);
-            GUILayout.Label(key + "FU“®");
-            GUILayout.Label("‰Ÿ‚³‚ê‚Ä‚¢‚éƒ{ƒ^ƒ“F" + button);
-            GUILayout.Label(string.Format("ƒXƒeƒBƒbƒNF({0}, {1})", stick[0], stick[1]));
-            GUILayout.Label("ƒWƒƒƒCƒF" + gyro);
-            GUILayout.Label("¶ƒWƒƒƒCƒ:" + gyroRaw);
-            GUILayout.Label("‰Á‘¬“xF" + accel);
-            GUILayout.Label("ŒX‚«F" + orientation);
+            GUILayout.Label(key + "ï¿½Fï¿½Uï¿½ï¿½");
+            GUILayout.Label("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½{ï¿½^ï¿½ï¿½ï¿½F" + button);
+            GUILayout.Label(string.Format("ï¿½Xï¿½eï¿½Bï¿½bï¿½Nï¿½F({0}, {1})", stick[0], stick[1]));
+            GUILayout.Label("ï¿½Wï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½F" + gyro);
+            GUILayout.Label("ï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½Cï¿½ï¿½:" + gyroRaw);
+            GUILayout.Label("ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½F" + accel);
+            GUILayout.Label("ï¿½Xï¿½ï¿½ï¿½F" + orientation);
             GUILayout.EndVertical();
         }
 
@@ -137,7 +137,7 @@ public class Example : MonoBehaviour
 
     void SetTrackPoints()
     {
-        // ƒgƒ‰ƒbƒLƒ“ƒO‚Ìİ’è—Ê‚ÆÚ‘±‚³‚ê‚½ƒWƒ‡ƒCƒRƒ“‚Ì”‚Ì¬‚³‚¢•û‚ğİ’è
+        // ï¿½gï¿½ï¿½ï¿½bï¿½Lï¿½ï¿½ï¿½Oï¿½Ìİ’ï¿½Ê‚ÆÚ‘ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½Wï¿½ï¿½ï¿½Cï¿½Rï¿½ï¿½ï¿½Ìï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½
         int loopLength = trackPoints.Length < m_joycons.Count ? trackPoints.Length : m_joycons.Count;
 
         for(int i = 0; i < loopLength; i++)

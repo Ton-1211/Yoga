@@ -19,7 +19,7 @@ public class Joycon
         IMU,
         RUMBLE,
     };
-	public DebugType debug_type = DebugType.NONE;
+    public DebugType debug_type = DebugType.NONE;
     public bool isLeft;
     public enum state_ : uint
     {
@@ -54,8 +54,8 @@ public class Joycon
 
     private float[] stick = { 0, 0 };
 
-    private 
-	IntPtr handle;
+    private
+    IntPtr handle;
 
     byte[] default_buf = { 0x0, 0x1, 0x40, 0x40, 0x0, 0x1, 0x40, 0x40 };
 
@@ -75,7 +75,7 @@ public class Joycon
     private Int16[] gyr_r = { 0, 0, 0 };
     private Int16[] gyr_neutral = { 0, 0, 0 };
     private Vector3 gyr_g;
-	private bool do_localize;
+    private bool do_localize;
     private float filterweight;
     private const uint report_len = 49;
     private struct Report
@@ -188,14 +188,14 @@ public class Joycon
     private byte global_count = 0;
     private string debug_str;
 
-	public Joycon(IntPtr handle_, bool imu, bool localize, float alpha, bool left)
+    public Joycon(IntPtr handle_, bool imu, bool localize, float alpha, bool left)
     {
-		handle = handle_;
-		imu_enabled = imu;
-		do_localize = localize;
+        handle = handle_;
+        imu_enabled = imu;
+        do_localize = localize;
         rumble_obj = new Rumble(160, 320, 0);
-		filterweight = alpha;
-		isLeft = left;
+        filterweight = alpha;
+        isLeft = left;
     }
     public void DebugPrint(String s, DebugType d)
     {
@@ -225,7 +225,7 @@ public class Joycon
     {
         return gyr_g;
     }
-    public Vector3 GetGyroRaw()// ƒWƒƒƒCƒ‚Ì¶ƒf[ƒ^‚ğæ“¾
+    public Vector3 GetGyroRaw()// ï¿½Wï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Ìï¿½ï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½æ“¾
     {
         return new Vector3(gyr_r[0] - gyr_neutral[0], gyr_r[1] - gyr_neutral[1], gyr_r[2] - gyr_neutral[2]);
     }
@@ -233,8 +233,8 @@ public class Joycon
     {
         return acc_g;
     }
-    
-    public Vector3 GetAccelRaw()// ¶ƒf[ƒ^(•â³Ï)‚Ì’l‚ğæ“¾
+
+    public Vector3 GetAccelRaw()// ï¿½ï¿½ï¿½fï¿½[ï¿½^(ï¿½â³ï¿½ï¿½)ï¿½Ì’lï¿½ï¿½ï¿½æ“¾
     {
         return new Vector3(acc_r[0] - acc_neutral[0], acc_r[1] - acc_neutral[1], acc_r[2] - acc_neutral[2]);
     }
@@ -243,13 +243,16 @@ public class Joycon
     {
         Vector3 v1 = new Vector3(j_b.x, i_b.x, k_b.x);
         Vector3 v2 = -(new Vector3(j_b.z, i_b.z, k_b.z));
-        if (v2 != Vector3.zero){
-		    return Quaternion.LookRotation(v1, v2);
-        }else{
+        if (v2 != Vector3.zero)
+        {
+            return Quaternion.LookRotation(v1, v2);
+        }
+        else
+        {
             return Quaternion.identity;
         }
     }
-	public int Attach(byte leds_ = 0x0)
+    public int Attach(byte leds_ = 0x0)
     {
         state = state_.ATTACHED;
         byte[] a = { 0x0 };
@@ -383,13 +386,17 @@ public class Joycon
                 ts_prev = rep.GetTime();
             }
             ProcessButtonsAndStick(report_buf);
-			if (rumble_obj.timed_rumble) {
-				if (rumble_obj.t < 0) {
-					rumble_obj.set_vals (160, 320, 0, 0);
-				} else {
-					rumble_obj.t -= Time.deltaTime;
-				}
-			}
+            if (rumble_obj.timed_rumble)
+            {
+                if (rumble_obj.t < 0)
+                {
+                    rumble_obj.set_vals(160, 320, 0, 0);
+                }
+                else
+                {
+                    rumble_obj.t -= Time.deltaTime;
+                }
+            }
         }
     }
     private int ProcessButtonsAndStick(byte[] report_buf)
@@ -451,10 +458,10 @@ public class Joycon
         {
             acc_g[i] = (acc_r[i] - acc_neutral[i]) * 0.00025f;
 
-            /* https://hoshi.903.ch/blog/20201218_vctl/‚ğQl‚ÉƒWƒƒƒCƒ‚ÌƒmƒCƒY‘Îô‚ğÀ‘• */
-            UInt16 gyr_threhold = 9;// ƒWƒƒƒCƒ‚ğŒŸ’m‚·‚é‚µ‚«‚¢’l‚ğİ’èi‘å‘ÌƒmƒCƒY‚Í}4‚Ü‚Å‚¾‚ªAˆê“x‚ÅŠmÀ‚É•â³‚µ‚½‚¢‚Ì‚Å2”{‚É‚µ‚Ä‚¢‚éj
+            /* https://hoshi.903.ch/blog/20201218_vctl/ï¿½ï¿½ï¿½Qï¿½lï¿½ÉƒWï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Ìƒmï¿½Cï¿½Yï¿½Îï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
+            UInt16 gyr_threhold = 9;// ï¿½Wï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½mï¿½ï¿½ï¿½é‚µï¿½ï¿½ï¿½ï¿½ï¿½lï¿½ï¿½İ’ï¿½iï¿½ï¿½Ìƒmï¿½Cï¿½Yï¿½Í}4ï¿½Ü‚Å‚ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½xï¿½ÅŠmï¿½ï¿½ï¿½É•â³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½2ï¿½{ï¿½É‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½j
 
-            if(-gyr_threhold < (gyr_r[i] - gyr_neutral[i]) && (gyr_r[i] - gyr_neutral[i]) < gyr_threhold)// ƒmƒCƒY‚Ì”ÍˆÍ“à
+            if (-gyr_threhold < (gyr_r[i] - gyr_neutral[i]) && (gyr_r[i] - gyr_neutral[i]) < gyr_threhold)// ï¿½mï¿½Cï¿½Yï¿½Ì”ÍˆÍ“ï¿½
             {
                 gyr_g[i] = 0f;
             }
@@ -463,24 +470,24 @@ public class Joycon
                 gyr_g[i] = (gyr_r[i] - gyr_neutral[i]) * 0.00122187695f;
             }
 
-            //gyr_g[i] = (gyr_r[i] - gyr_neutral[i]) * 0.00122187695f; // ‘Îô‘O‚Ìˆ—
+            //gyr_g[i] = (gyr_r[i] - gyr_neutral[i]) * 0.00122187695f; // ï¿½Îï¿½ï¿½Oï¿½Ìï¿½ï¿½ï¿½
             if (Math.Abs(acc_g[i]) > Math.Abs(max[i]))
                 max[i] = acc_g[i];
         }
     }
 
-	private float err;
+    private float err;
     public Vector3 i_b, j_b, k_b, k_acc;
-	private Vector3 d_theta;
-	private Vector3 i_b_;
-	private Vector3 w_a, w_g;
+    private Vector3 d_theta;
+    private Vector3 i_b_;
+    private Vector3 w_a, w_g;
     private Quaternion vec;
-	
+
     private int ProcessIMU(byte[] report_buf)
     {
 
-		// Direction Cosine Matrix method
-		// http://www.starlino.com/dcm_tutorial.html
+        // Direction Cosine Matrix method
+        // http://www.starlino.com/dcm_tutorial.html
 
         if (!imu_enabled | state < state_.IMU_DATA_OK)
             return -1;
@@ -494,8 +501,8 @@ public class Joycon
         for (int n = 0; n < 3; ++n)
         {
             ExtractIMUValues(report_buf, n);
-            
-			float dt_sec = 0.005f * dt;
+
+            float dt_sec = 0.005f * dt;
             sum[0] += gyr_g.x * dt_sec;
             sum[1] += gyr_g.y * dt_sec;
             sum[2] += gyr_g.z * dt_sec;
@@ -570,7 +577,7 @@ public class Joycon
     public void SetRumble(float low_freq, float high_freq, float amp, int time = 0)
     {
         if (state <= Joycon.state_.ATTACHED) return;
-		if (rumble_obj.timed_rumble == false || rumble_obj.t < 0)
+        if (rumble_obj.timed_rumble == false || rumble_obj.t < 0)
         {
             rumble_obj = new Rumble(low_freq, high_freq, amp, time);
         }
@@ -650,7 +657,7 @@ public class Joycon
             PrintArray(gyr_neutral, len: 3, d: DebugType.IMU, format: "Factory gyro neutral position: {0:S}");
         }
 
-        /* ‰Á‘¬“x‚Ì•â³’læ“¾ */
+        /* ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Ì•â³ï¿½lï¿½æ“¾ */
         buf_ = ReadSPI(0x80, 0x28, 10);
         acc_neutral[0] = (Int16)(buf_[0] | ((buf_[1] << 8) & 0xff00));
         acc_neutral[1] = (Int16)(buf_[2] | ((buf_[3] << 8) & 0xff00));
