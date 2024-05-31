@@ -6,8 +6,22 @@ using UnityEngine;
 
 /* https://www.mof-mof.co.jp/tech-blog/unity-joycon-introduceのスクリプトをもとにしている */
 
+[Serializable] class TrackPoint
+{
+    [Header("トラッキングで動かすオブジェクト"), SerializeField] Transform TrackTransform;
+    public Joycon TrackJoycon { get; set; }
+
+    public Transform GetTransform() { return TrackTransform; }
+
+    public void AddPosition( Vector3 vector3)
+    {
+        TrackTransform.position += vector3;
+    }
+}
 public class Example : MonoBehaviour
 {
+    [SerializeField] TrackPoint[] trackPoints;
+
     private static readonly Joycon.Button[] m_buttons =
         Enum.GetValues(typeof(Joycon.Button)) as Joycon.Button[];
 
@@ -20,6 +34,7 @@ public class Example : MonoBehaviour
     private void Start()
     {
         SetControllers();
+        SetTrackPoints();
     }
 
     private void Update()
@@ -50,6 +65,13 @@ public class Example : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.X))
         {
             m_joyconR.SetRumble(160, 320, 0.6f, 200);
+        }
+
+        foreach(TrackPoint trackPoint in trackPoints)
+        {
+            Vector3 moveAmount = trackPoint.TrackJoycon.GetAccel() * Time.deltaTime * Time.deltaTime;
+
+            trackPoint.AddPosition(moveAmount);
         }
     }
 
@@ -111,5 +133,16 @@ public class Example : MonoBehaviour
         if (m_joycons == null || m_joycons.Count <= 0) return;
         m_joyconL = m_joycons.Find(c => c.isLeft);
         m_joyconR = m_joycons.Find(c => !c.isLeft);
+    }
+
+    void SetTrackPoints()
+    {
+        // トラッキングの設定量と接続されたジョイコンの数の小さい方を設定
+        int loopLength = trackPoints.Length < m_joycons.Count ? trackPoints.Length : m_joycons.Count;
+
+        for(int i = 0; i < loopLength; i++)
+        {
+            trackPoints[i].TrackJoycon = m_joycons[i];
+        }
     }
 }

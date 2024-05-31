@@ -440,12 +440,6 @@ public class Joycon
     }
     private void ExtractIMUValues(byte[] report_buf, int n = 0)
     {
-        /* 加速度の補正値取得 */
-        byte[] buf_ = ReadSPI(0x80, 0x28, 10);
-        acc_neutral[0] = (Int16)(buf_[0] | ((buf_[1] << 8)) & 0xff00);
-        acc_neutral[1] = (Int16)(buf_[2] | ((buf_[3] << 8)) & 0xff00);
-        acc_neutral[2] = (Int16)(buf_[4] | ((buf_[5] << 8)) & 0xff00);
-        PrintArray(acc_neutral, len: 3, d: DebugType.IMU, format: "User accle neutral position: {0:5}");
 
         gyr_r[0] = (Int16)(report_buf[19 + n * 12] | ((report_buf[20 + n * 12] << 8) & 0xff00));
         gyr_r[1] = (Int16)(report_buf[21 + n * 12] | ((report_buf[22 + n * 12] << 8) & 0xff00));
@@ -655,6 +649,13 @@ public class Joycon
             gyr_neutral[2] = (Int16)(buf_[7] | ((buf_[8] << 8) & 0xff00));
             PrintArray(gyr_neutral, len: 3, d: DebugType.IMU, format: "Factory gyro neutral position: {0:S}");
         }
+
+        /* 加速度の補正値取得 */
+        buf_ = ReadSPI(0x80, 0x28, 10);
+        acc_neutral[0] = (Int16)(buf_[0] | ((buf_[1] << 8) & 0xff00));
+        acc_neutral[1] = (Int16)(buf_[2] | ((buf_[3] << 8) & 0xff00));
+        acc_neutral[2] = (Int16)(buf_[4] | ((buf_[5] << 8) & 0xff00));
+        PrintArray(acc_neutral, len: 3, d: DebugType.IMU, format: "User accle neutral position: {0:S}");
     }
     private byte[] ReadSPI(byte addr1, byte addr2, uint len, bool print = false)
     {
