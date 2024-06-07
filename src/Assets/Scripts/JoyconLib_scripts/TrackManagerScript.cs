@@ -1,15 +1,15 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-/* https://www.mof-mof.co.jp/tech-blog/unity-joycon-introduce‚ÌƒXƒNƒŠƒvƒg‚ğ‚à‚Æ‚É‚µ‚Ä‚¢‚é */
+/* https://www.mof-mof.co.jp/tech-blog/unity-joycon-introduceã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’ã‚‚ã¨ã«ã—ã¦ã„ã‚‹ */
 
 [Serializable]
 class TrackPoint
 {
-    [Header("ƒgƒ‰ƒbƒLƒ“ƒO‚Å“®‚©‚·ƒIƒuƒWƒFƒNƒg"), SerializeField] Transform TrackTransform;
+    [Header("ãƒˆãƒ©ãƒƒã‚­ãƒ³ã‚°ã§å‹•ã‹ã™ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ"), SerializeField] Transform TrackTransform;
     public Joycon TrackJoycon { get; set; }
 
     public Transform GetTransform() { return TrackTransform; }
@@ -43,6 +43,7 @@ public class TrackManagerScript : MonoBehaviour
         m_pressedButtonR = null;
         if (m_joycons == null || m_joycons.Count <= 0) return;
         SetControllers();
+        SetTrackPoints();
         foreach (var button in m_buttons)
         {
             if (m_joyconL.GetButton(button))
@@ -65,7 +66,13 @@ public class TrackManagerScript : MonoBehaviour
 
         foreach (TrackPoint trackPoint in trackPoints)
         {
-            Vector3 moveAmount = trackPoint.TrackJoycon.GetAccel() * Time.deltaTime * Time.deltaTime * 1000f;// ”š‚ÍŒã‚Å•Ï”‚É‚·‚é
+            Vector3 moveAmount = new Vector3(-trackPoint.TrackJoycon.GetAccel().y, -trackPoint.TrackJoycon.GetAccel().x, -trackPoint.TrackJoycon.GetAccel().z)
+                * Time.deltaTime * Time.deltaTime * 1f;// ã‚¸ãƒ§ã‚¤ã‚³ãƒ³ã®åŠ é€Ÿåº¦ã‚»ãƒ³ã‚µã¯xãŒç¸¦ã€yãŒæ¨ªæ–¹å‘ã ã£ãŸã‚Š+-ãŒUnityã¨é€†ã ã£ãŸã‚Šã™ã‚‹ã®ã§Unityã«æƒãˆãŸ
+                                                       // å€ç‡ã®æ•°å­—ã¯å¾Œã§å¤‰æ•°ã«ã™ã‚‹
+            Quaternion orientation = trackPoint.TrackJoycon.GetVector();
+            //orientation = new Quaternion(orientation.x, orientation.z, orientation.y, orientation.w);
+            trackPoint.GetTransform().rotation = orientation;
+            trackPoint.GetTransform().Rotate(90, 0, 0, Space.World);
 
             trackPoint.AddPosition(moveAmount);
         }
@@ -77,17 +84,17 @@ public class TrackManagerScript : MonoBehaviour
         style.fontSize = 24;
         if (m_joycons == null || m_joycons.Count <= 0)
         {
-            GUILayout.Label("Joy-Con ‚ªÚ‘±‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+            GUILayout.Label("Joy-Con ãŒæ¥ç¶šã•ã‚Œã¦ã„ã¾ã›ã‚“");
             return;
         }
         if (!m_joycons.Any(c => c.isLeft))
         {
-            GUILayout.Label("Joy-Con (L) ‚ªÚ‘±‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+            GUILayout.Label("Joy-Con (L) ãŒæ¥ç¶šã•ã‚Œã¦ã„ã¾ã›ã‚“");
             return;
         }
         if (!m_joycons.Any(c => !c.isLeft))
         {
-            GUILayout.Label("Joy-Con (R) ‚ªÚ‘±‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+            GUILayout.Label("Joy-Con (R) ãŒæ¥ç¶šã•ã‚Œã¦ã„ã¾ã›ã‚“");
             return;
         }
         GUILayout.BeginHorizontal(GUILayout.Width(960));
@@ -95,22 +102,24 @@ public class TrackManagerScript : MonoBehaviour
         {
             var isLeft = joycon.isLeft;
             var name = isLeft ? "Joy-Con (L)" : "Joy-Con (R)";
-            var key = isLeft ? "Z ƒL[" : "X ƒL[";
+            var key = isLeft ? "Z ã‚­ãƒ¼" : "X ã‚­ãƒ¼";
             var button = isLeft ? m_pressedButtonL : m_pressedButtonR;
             var stick = joycon.GetStick();
             var gyro = joycon.GetGyro();
             Vector3 gyroRaw = joycon.GetGyroRaw();
             var accel = joycon.GetAccel();
             var orientation = joycon.GetVector();
+            Vector3 angle = joycon.GetVector().eulerAngles;
             GUILayout.BeginVertical(GUILayout.Width(480));
             GUILayout.Label(name);
-            GUILayout.Label(key + "FU“®");
-            GUILayout.Label("‰Ÿ‚³‚ê‚Ä‚¢‚éƒ{ƒ^ƒ“F" + button);
-            GUILayout.Label(string.Format("ƒXƒeƒBƒbƒNF({0}, {1})", stick[0], stick[1]));
-            GUILayout.Label("ƒWƒƒƒCƒF" + gyro);
-            GUILayout.Label("¶ƒWƒƒƒCƒ:" + gyroRaw);
-            GUILayout.Label("‰Á‘¬“xF" + accel);
-            GUILayout.Label("ŒX‚«F" + orientation);
+            GUILayout.Label(key + "ï¼šæŒ¯å‹•");
+            GUILayout.Label("æŠ¼ã•ã‚Œã¦ã„ã‚‹ãƒœã‚¿ãƒ³ï¼š" + button);
+            GUILayout.Label(string.Format("ã‚¹ãƒ†ã‚£ãƒƒã‚¯ï¼š({0}, {1})", stick[0], stick[1]));
+            GUILayout.Label("ã‚¸ãƒ£ã‚¤ãƒ­ï¼š" + gyro);
+            //GUILayout.Label("ç”Ÿã‚¸ãƒ£ã‚¤ãƒ­:" + gyroRaw);
+            GUILayout.Label("åŠ é€Ÿåº¦ï¼š" + accel);
+            GUILayout.Label("å‚¾ãï¼š" + orientation);
+            GUILayout.Label("ã‚ªã‚¤ãƒ©ãƒ¼è§’" + angle);
             GUILayout.EndVertical();
         }
         GUILayout.EndHorizontal();
@@ -125,7 +134,7 @@ public class TrackManagerScript : MonoBehaviour
 
     void SetTrackPoints()
     {
-        // ƒgƒ‰ƒbƒLƒ“ƒO‚Ìİ’è—Ê‚ÆÚ‘±‚³‚ê‚½ƒWƒ‡ƒCƒRƒ“‚Ì”‚Ì¬‚³‚¢•û‚ğİ’è
+        // ãƒˆãƒ©ãƒƒã‚­ãƒ³ã‚°ã®è¨­å®šé‡ã¨æ¥ç¶šã•ã‚ŒãŸã‚¸ãƒ§ã‚¤ã‚³ãƒ³ã®æ•°ã®å°ã•ã„æ–¹ã‚’è¨­å®š
         int loopLength = trackPoints.Length < m_joycons.Count ? trackPoints.Length : m_joycons.Count;
 
         for (int i = 0; i < loopLength; i++)

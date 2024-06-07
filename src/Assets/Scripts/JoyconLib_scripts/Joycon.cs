@@ -1,4 +1,4 @@
-#define DEBUG
+﻿#define DEBUG
 
 using System.Collections;
 using System.Collections.Generic;
@@ -225,7 +225,7 @@ public class Joycon
     {
         return gyr_g;
     }
-    public Vector3 GetGyroRaw()// �W���C���̐��f�[�^���擾
+    public Vector3 GetGyroRaw()// ジャイロの生データを取得
     {
         return new Vector3(gyr_r[0] - gyr_neutral[0], gyr_r[1] - gyr_neutral[1], gyr_r[2] - gyr_neutral[2]);
     }
@@ -234,9 +234,20 @@ public class Joycon
         return acc_g;
     }
 
-    public Vector3 GetAccelRaw()// ���f�[�^(�␳��)�̒l���擾
+    public Vector3 GetAccelRaw()// 加速度の生データを取得
     {
         return new Vector3(acc_r[0] - acc_neutral[0], acc_r[1] - acc_neutral[1], acc_r[2] - acc_neutral[2]);
+    }
+
+    public Vector3 GetAccelWithoutGravity(Vector3 angle)
+    {
+        Vector3 accel = GetAccel();
+        Vector3 gravityPullAngle = -angle;
+        gravityPullAngle.Normalize();
+
+        accel -= gravityPullAngle;
+
+        return accel;
     }
 
     public Quaternion GetVector()
@@ -458,10 +469,10 @@ public class Joycon
         {
             acc_g[i] = (acc_r[i] - acc_neutral[i]) * 0.00025f;
 
-            /* https://hoshi.903.ch/blog/20201218_vctl/���Q�l�ɃW���C���̃m�C�Y�΍������ */
-            UInt16 gyr_threhold = 9;// �W���C�������m���邵�����l��ݒ�i��̃m�C�Y�́}4�܂ł����A��x�Ŋm���ɕ␳�������̂�2�{�ɂ��Ă���j
+            /* https://hoshi.903.ch/blog/20201218_vctl/ を参考にした */
+            UInt16 gyr_threhold = 9;// 再補正対策で少し大きめにしている
 
-            if (-gyr_threhold < (gyr_r[i] - gyr_neutral[i]) && (gyr_r[i] - gyr_neutral[i]) < gyr_threhold)// �m�C�Y�͈͓̔�
+            if (-gyr_threhold < (gyr_r[i] - gyr_neutral[i]) && (gyr_r[i] - gyr_neutral[i]) < gyr_threhold)// フィルターの範囲内
             {
                 gyr_g[i] = 0f;
             }
@@ -470,7 +481,7 @@ public class Joycon
                 gyr_g[i] = (gyr_r[i] - gyr_neutral[i]) * 0.00122187695f;
             }
 
-            //gyr_g[i] = (gyr_r[i] - gyr_neutral[i]) * 0.00122187695f; // �΍��O�̏���
+            //gyr_g[i] = (gyr_r[i] - gyr_neutral[i]) * 0.00122187695f; // 補正なし版
             if (Math.Abs(acc_g[i]) > Math.Abs(max[i]))
                 max[i] = acc_g[i];
         }
