@@ -1,4 +1,4 @@
-#define DEBUG
+ï»¿#define DEBUG
 
 using System.Collections;
 using System.Collections.Generic;
@@ -225,7 +225,7 @@ public class Joycon
     {
         return gyr_g;
     }
-    public Vector3 GetGyroRaw()// ƒWƒƒƒCƒ‚Ì¶ƒf[ƒ^‚ğæ“¾
+    public Vector3 GetGyroRaw()// ã‚¸ãƒ£ã‚¤ãƒ­ã®ç”Ÿãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—
     {
         return new Vector3(gyr_r[0] - gyr_neutral[0], gyr_r[1] - gyr_neutral[1], gyr_r[2] - gyr_neutral[2]);
     }
@@ -234,7 +234,7 @@ public class Joycon
         return acc_g;
     }
     
-    public Vector3 GetAccelRaw()// ¶ƒf[ƒ^(•â³Ï)‚Ì’l‚ğæ“¾
+    public Vector3 GetAccelRaw()// ç”Ÿãƒ‡ãƒ¼ã‚¿(è£œæ­£æ¸ˆ)ã®å€¤ã‚’å–å¾—
     {
         return new Vector3(acc_r[0] - acc_neutral[0], acc_r[1] - acc_neutral[1], acc_r[2] - acc_neutral[2]);
     }
@@ -451,10 +451,10 @@ public class Joycon
         {
             acc_g[i] = (acc_r[i] - acc_neutral[i]) * 0.00025f;
 
-            /* https://hoshi.903.ch/blog/20201218_vctl/‚ğQl‚ÉƒWƒƒƒCƒ‚ÌƒmƒCƒY‘Îô‚ğÀ‘• */
-            UInt16 gyr_threhold = 9;// ƒWƒƒƒCƒ‚ğŒŸ’m‚·‚é‚µ‚«‚¢’l‚ğİ’èi‘å‘ÌƒmƒCƒY‚Í}4‚Ü‚Å‚¾‚ªAˆê“x‚ÅŠmÀ‚É•â³‚µ‚½‚¢‚Ì‚Å2”{‚É‚µ‚Ä‚¢‚éj
+            /* https://hoshi.903.ch/blog/20201218_vctl/ã‚’å‚è€ƒã«ã‚¸ãƒ£ã‚¤ãƒ­ã®ãƒã‚¤ã‚ºå¯¾ç­–ã‚’å®Ÿè£… */
+            UInt16 gyr_threhold = 9;// ã‚¸ãƒ£ã‚¤ãƒ­ã‚’æ¤œçŸ¥ã™ã‚‹ã—ãã„å€¤ã‚’è¨­å®šï¼ˆå¤§ä½“ãƒã‚¤ã‚ºã¯Â±4ã¾ã§ã ãŒã€ä¸€åº¦ã§ç¢ºå®Ÿã«è£œæ­£ã—ãŸã„ã®ã§2å€ã«ã—ã¦ã„ã‚‹ï¼‰
 
-            if(-gyr_threhold < (gyr_r[i] - gyr_neutral[i]) && (gyr_r[i] - gyr_neutral[i]) < gyr_threhold)// ƒmƒCƒY‚Ì”ÍˆÍ“à
+            if(-gyr_threhold < (gyr_r[i] - gyr_neutral[i]) && (gyr_r[i] - gyr_neutral[i]) < gyr_threhold)// ãƒã‚¤ã‚ºã®ç¯„å›²å†…
             {
                 gyr_g[i] = 0f;
             }
@@ -463,7 +463,7 @@ public class Joycon
                 gyr_g[i] = (gyr_r[i] - gyr_neutral[i]) * 0.00122187695f;
             }
 
-            //gyr_g[i] = (gyr_r[i] - gyr_neutral[i]) * 0.00122187695f; // ‘Îô‘O‚Ìˆ—
+            //gyr_g[i] = (gyr_r[i] - gyr_neutral[i]) * 0.00122187695f; // å¯¾ç­–å‰ã®å‡¦ç†
             if (Math.Abs(acc_g[i]) > Math.Abs(max[i]))
                 max[i] = acc_g[i];
         }
@@ -650,7 +650,7 @@ public class Joycon
             PrintArray(gyr_neutral, len: 3, d: DebugType.IMU, format: "Factory gyro neutral position: {0:S}");
         }
 
-        /* ‰Á‘¬“x‚Ì•â³’læ“¾ */
+        /* åŠ é€Ÿåº¦ã®è£œæ­£å€¤å–å¾— */
         buf_ = ReadSPI(0x80, 0x28, 10);
         acc_neutral[0] = (Int16)(buf_[0] | ((buf_[1] << 8) & 0xff00));
         acc_neutral[1] = (Int16)(buf_[2] | ((buf_[3] << 8) & 0xff00));
