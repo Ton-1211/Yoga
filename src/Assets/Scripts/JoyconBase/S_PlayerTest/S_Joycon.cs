@@ -247,14 +247,14 @@ public class S_Joycon
 
         /* ローパスフィルタ */
 
-        float alpha = 0.95f;// アルファ値
+        float alpha = 0.97f;// アルファ値
         Vector3 accel_NoGravity = Vector3.zero;
         float threshold = 0.05f;// しきい値
         for(int axis = 0; axis < 3; axis++)
         {
             acc_gravity[axis] = (alpha * acc_gravity[axis]) + ((1 - alpha) * accel[axis]);  // 出力値 = a * 前回の出力値 + (1 - a) * センサの値
             accel_NoGravity[axis] = accel[axis] - acc_gravity[axis];                        // 重力の値を除く (現在-方向がほぼ出ない)
-            //if (-threshold < -accel_NoGravity[axis] || accel_NoGravity[axis] < threshold)
+            //if (-threshold < accel_NoGravity[axis] || accel_NoGravity[axis] < threshold)
             //{
             //    accel_NoGravity[axis] = 0f;
             //}

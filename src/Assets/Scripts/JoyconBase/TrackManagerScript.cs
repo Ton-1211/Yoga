@@ -11,12 +11,19 @@ class TrackPoint
 {
     [Header("トラッキングで動かすオブジェクト"), SerializeField] Transform TrackTransform;
     public S_Joycon TrackJoycon { get; set; }
+    public Rigidbody rigidbody { get; set; }
 
     public Transform GetTransform() { return TrackTransform; }
 
     public void AddPosition(Vector3 vector3)
     {
-        TrackTransform.position += vector3;
+        //TrackTransform.position += vector3;
+        TrackTransform.position += new Vector3(vector3.x, vector3.y, 0f);
+    }
+
+    public void AddForce(Vector3 vector3)
+    {
+        rigidbody.AddForce(new Vector3(vector3.x, vector3.y, 0f), ForceMode.Impulse);
     }
 }
 public class TrackManagerScript : MonoBehaviour
@@ -35,9 +42,18 @@ public class TrackManagerScript : MonoBehaviour
     {
         SetControllers();
         SetTrackPoints();
+        foreach(TrackPoint trackPoint in trackPoints)
+        {
+            trackPoint.rigidbody = trackPoint.GetTransform().GetComponent<Rigidbody>();
+        }
     }
 
     private void FixedUpdate()
+    {
+        
+    }
+
+    private void Update()
     {
         foreach (TrackPoint trackPoint in trackPoints)
         {
@@ -50,15 +66,11 @@ public class TrackManagerScript : MonoBehaviour
 
             Quaternion orientation = trackPoint.TrackJoycon.GetVector();
             //orientation = new Quaternion(orientation.x, orientation.z, orientation.y, orientation.w);
-            trackPoint.GetTransform().rotation = orientation;
-            trackPoint.GetTransform().Rotate(90, 0, 0, Space.World);
+            //trackPoint.GetTransform().rotation = orientation;
+            //trackPoint.GetTransform().Rotate(90, 0, 0, Space.World);
 
             trackPoint.AddPosition(moveAmount);
         }
-    }
-
-    private void Update()
-    {
         m_pressedButtonL = null;
         m_pressedButtonR = null;
         if (m_joycons == null || m_joycons.Count <= 0) return;
@@ -166,6 +178,7 @@ public class TrackManagerScript : MonoBehaviour
             if(trackpoint.TrackJoycon == joycon)
             {
                 trackpoint.GetTransform().position = Vector3.zero;// 位置のリセット
+                trackpoint.TrackJoycon.Recenter();// 回転のリセット
                 return;
             }
         }
