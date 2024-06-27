@@ -68,11 +68,13 @@ public class S_Joycon
     private int timestamp;
     private bool first_imu_packet = true;
     private bool imu_enabled = false;
+    private bool isMoving = false;
     private Int16[] acc_r = { 0, 0, 0 };
     private Int16[] acc_neutral = { 0, 0, 0 };
     private Vector3 acc_gravity = Vector3.zero;
     private Vector3 acc_old;
     private Vector3 acc_g;
+    private Vector3 accel_old = Vector3.zero;
 
     private Int16[] gyr_r = { 0, 0, 0 };
     private Int16[] gyr_neutral = { 0, 0, 0 };
@@ -253,11 +255,28 @@ public class S_Joycon
         for(int axis = 0; axis < 3; axis++)
         {
             acc_gravity[axis] = (alpha * acc_gravity[axis]) + ((1 - alpha) * accel[axis]);  // 出力値 = a * 前回の出力値 + (1 - a) * センサの値
-            accel_NoGravity[axis] = accel[axis] - acc_gravity[axis];                        // 重力の値を除く (現在-方向がほぼ出ない)
-            //if (-threshold < accel_NoGravity[axis] || accel_NoGravity[axis] < threshold)
-            //{
-            //    accel_NoGravity[axis] = 0f;
-            //}
+            accel_NoGravity[axis] = accel[axis] - acc_gravity[axis];                        // 重力の値を除く
+
+            if (accel_NoGravity[axis] * accel_NoGravity[axis] < threshold * threshold)
+            {
+                //accel_NoGravity[axis] = 0f;
+                isMoving = false;
+            }
+
+            float diff_axis = accel_NoGravity[axis] - accel_old[axis];// 前回の値との差分
+            float diff_limit = 0.5f;// 差分のフィルターするしきい値
+
+            accel_old[axis] = accel_NoGravity[axis];
+            if (isMoving && diff_axis * diff_axis > diff_limit)// ブレーキのような挙動を補正
+            {
+                accel_NoGravity[axis] = 0f;
+            }
+            
+        }
+        if (!isMoving && accel_NoGravity.sqrMagnitude > threshold * threshold)
+        {
+            accel_NoGravity = Vector3.zero;
+                isMoving = true;
         }
         //acc_old = acc_g;
         return accel_NoGravity;
