@@ -7,11 +7,11 @@ using UnityEngine;
 /* https://www.mof-mof.co.jp/tech-blog/unity-joycon-introduceのスクリプトをもとにしている */
 
 [Serializable]
-class TrackPoint
+public class TrackPoint
 {
     [Header("トラッキングで動かすオブジェクト"), SerializeField] Transform TrackTransform;
     public S_Joycon TrackJoycon { get; set; }
-    public Rigidbody rigidbody { get; set; }
+    public Rigidbody Rigidbody { get; set; }
 
     public Transform GetTransform() { return TrackTransform; }
 
@@ -23,12 +23,12 @@ class TrackPoint
 
     public void AddForce(Vector3 vector3)
     {
-        rigidbody.AddForce(new Vector3(vector3.x, vector3.y, 0f), ForceMode.Impulse);
+        Rigidbody.AddForce(new Vector3(vector3.x, vector3.y, 0f), ForceMode.Impulse);
     }
 }
 public class TrackManagerScript : MonoBehaviour
 {
-    [SerializeField] TrackPoint[] trackPoints;
+    [SerializeField] List<TrackPoint> trackPoints;
 
     private static readonly S_Joycon.Button[] m_buttons =
         Enum.GetValues(typeof(S_Joycon.Button)) as S_Joycon.Button[];
@@ -38,13 +38,18 @@ public class TrackManagerScript : MonoBehaviour
     private S_Joycon m_joyconR;
     private S_Joycon.Button? m_pressedButtonL;
     private S_Joycon.Button? m_pressedButtonR;
+
+    public List<TrackPoint> TrackPoints
+    {
+        get { return trackPoints; }
+    }
     private void Start()
     {
         SetControllers();
         SetTrackPoints();
         foreach(TrackPoint trackPoint in trackPoints)
         {
-            trackPoint.rigidbody = trackPoint.GetTransform().GetComponent<Rigidbody>();
+            trackPoint.Rigidbody = trackPoint.GetTransform().GetComponent<Rigidbody>();
         }
     }
 
@@ -163,7 +168,7 @@ public class TrackManagerScript : MonoBehaviour
     void SetTrackPoints()
     {
         // トラッキングの設定量と接続されたジョイコンの数の小さい方を設定
-        int loopLength = trackPoints.Length < m_joycons.Count ? trackPoints.Length : m_joycons.Count;
+        int loopLength = trackPoints.Count < m_joycons.Count ? trackPoints.Count : m_joycons.Count;
 
         for (int i = 0; i < loopLength; i++)
         {
