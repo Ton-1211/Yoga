@@ -32,7 +32,7 @@ public class PlayerManagerScript : MonoBehaviour
         obtainedDamage = 0;
     }
 
-    public int GetBeamDamage(float damageMagnification)
+    public int GetBeamDamage(float damageMagnification = 1f)
     {
         return (int)(obtainedDamage * damageMagnification);
     }
