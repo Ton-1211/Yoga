@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/S_JoyConTest.unity
+    guid: 8aaaff61c632b7c449a715fb654c7adc
   m_configObjects: {}
