@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GameFlowManagerScript : MonoBehaviour
 {
@@ -35,6 +36,31 @@ public class GameFlowManagerScript : MonoBehaviour
         ChangeGameState(gameState);
     }
 
+    public void OnChangeGameState(InputAction.CallbackContext context)
+    {
+        if(context.phase == InputActionPhase.Started)
+        {
+            switch(gameState)
+            {
+                case GameState.Start:
+                    ChangeGameState(GameState.BossAttack);
+                    break;
+                case GameState.BossAttack:
+                    ChangeGameState(GameState.Drain);
+                    break;
+                case GameState.Drain:
+                    ChangeGameState(GameState.PlayerAttack);
+                    break;
+                case GameState.PlayerAttack:
+                    bossAnimator.SetBool("Diagonal", false);
+                    ChangeGameState(GameState.BossAttack);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
     void ChangeGameState(GameState state)
     {
         gameState = state;
@@ -58,9 +84,10 @@ public class GameFlowManagerScript : MonoBehaviour
     IEnumerator SummonBossAttack()// アニメーションを再生するフラグを時間差で切るためにコルーチンにした
     {
         bossAnimator.SetBool("EnemyAttack", true);
+        yield return new WaitForSeconds(0.3f);
         foreach (Transform attackSpawnPoint in attackSpawnPoints)
         {
-            GameObject attack = Instantiate(enemyAttackPrefab, attackSpawnPoint.position, Quaternion.identity);
+            GameObject attack = Instantiate(enemyAttackPrefab, attackSpawnPoint.position, attackSpawnPoint.rotation);
         }
         yield return new WaitForSeconds(0.5f);
         bossAnimator.SetBool("EnemyAttack", false);
@@ -75,6 +102,8 @@ public class GameFlowManagerScript : MonoBehaviour
         int damage = playerManager.GetBeamDamage();
         scoreScript.AddScore(damage);
 
-        yield return null;
+        yield return new WaitForSeconds(5f);
+
+        bossAnimator.SetBool("Damaged", true);
     }
 }
