@@ -94,6 +94,10 @@ public class TrackManagerScript : MonoBehaviour
             if (m_joyconR.GetButton(button))
             {
                 m_pressedButtonR = button;
+                if (m_pressedButtonR == S_Joycon.Button.DPAD_DOWN)
+                {
+                    ResetTrackPosition(m_joyconR);
+                }
             }
         }
         if (Input.GetKeyDown(KeyCode.Z))
