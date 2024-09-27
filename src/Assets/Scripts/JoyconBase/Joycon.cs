@@ -69,6 +69,7 @@ public class Joycon
     private bool first_imu_packet = true;
     private bool imu_enabled = false;
     private Int16[] acc_r = { 0, 0, 0 };
+    private Int16[] acc_neutral = { 0, 0, 0 };
     private Vector3 acc_g;
 
     private Int16[] gyr_r = { 0, 0, 0 };
