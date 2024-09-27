@@ -69,7 +69,6 @@ public class Joycon
     private bool first_imu_packet = true;
     private bool imu_enabled = false;
     private Int16[] acc_r = { 0, 0, 0 };
-    private Int16[] acc_neutral = { 0, 0, 0 };
     private Vector3 acc_g;
 
     private Int16[] gyr_r = { 0, 0, 0 };
@@ -458,7 +457,6 @@ public class Joycon
     }
     private void ExtractIMUValues(byte[] report_buf, int n = 0)
     {
-
         gyr_r[0] = (Int16)(report_buf[19 + n * 12] | ((report_buf[20 + n * 12] << 8) & 0xff00));
         gyr_r[1] = (Int16)(report_buf[21 + n * 12] | ((report_buf[22 + n * 12] << 8) & 0xff00));
         gyr_r[2] = (Int16)(report_buf[23 + n * 12] | ((report_buf[24 + n * 12] << 8) & 0xff00));
@@ -467,7 +465,7 @@ public class Joycon
         acc_r[2] = (Int16)(report_buf[17 + n * 12] | ((report_buf[18 + n * 12] << 8) & 0xff00));
         for (int i = 0; i < 3; ++i)
         {
-            acc_g[i] = (acc_r[i] - acc_neutral[i]) * 0.00025f;
+            acc_g[i] = acc_r[i] * 0.00025f;
 
             /* https://hoshi.903.ch/blog/20201218_vctl/ を参考にした */
             UInt16 gyr_threhold = 9;// 再補正対策で少し大きめにしている
