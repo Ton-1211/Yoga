@@ -537,7 +537,6 @@ public class Joycon
                 k_acc = -Vector3.Normalize(acc_g);
                 w_a = Vector3.Cross(k_b, k_acc);
                 w_g = -gyr_g * dt_sec;
-                //w_g = new Vector3(gyr_g.x, gyr_g.z, gyr_g.y) * -dt_sec;
                 d_theta = (filterweight * w_a + w_g) / (1f + filterweight);
                 k_b += Vector3.Cross(d_theta, k_b);
                 i_b += Vector3.Cross(d_theta, i_b);
