@@ -458,7 +458,6 @@ public class Joycon
     }
     private void ExtractIMUValues(byte[] report_buf, int n = 0)
     {
-
         gyr_r[0] = (Int16)(report_buf[19 + n * 12] | ((report_buf[20 + n * 12] << 8) & 0xff00));
         gyr_r[1] = (Int16)(report_buf[21 + n * 12] | ((report_buf[22 + n * 12] << 8) & 0xff00));
         gyr_r[2] = (Int16)(report_buf[23 + n * 12] | ((report_buf[24 + n * 12] << 8) & 0xff00));
@@ -467,7 +466,7 @@ public class Joycon
         acc_r[2] = (Int16)(report_buf[17 + n * 12] | ((report_buf[18 + n * 12] << 8) & 0xff00));
         for (int i = 0; i < 3; ++i)
         {
-            acc_g[i] = (acc_r[i] - acc_neutral[i]) * 0.00025f;
+            acc_g[i] = acc_r[i] * 0.00025f;
 
             /* https://hoshi.903.ch/blog/20201218_vctl/ を参考にした */
             UInt16 gyr_threhold = 9;// 再補正対策で少し大きめにしている
@@ -538,7 +537,6 @@ public class Joycon
                 k_acc = -Vector3.Normalize(acc_g);
                 w_a = Vector3.Cross(k_b, k_acc);
                 w_g = -gyr_g * dt_sec;
-                //w_g = new Vector3(gyr_g.x, gyr_g.z, gyr_g.y) * -dt_sec;
                 d_theta = (filterweight * w_a + w_g) / (1f + filterweight);
                 k_b += Vector3.Cross(d_theta, k_b);
                 i_b += Vector3.Cross(d_theta, i_b);

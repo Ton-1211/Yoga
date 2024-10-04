@@ -243,42 +243,63 @@ public class S_Joycon
         return new Vector3(acc_r[0] - acc_neutral[0], acc_r[1] - acc_neutral[1], acc_r[2] - acc_neutral[2]);
     }
 
-    public Vector3 GetAccelWithoutGravity()// 重力加速度を抜いた加速度
+    //public Vector3 GetAccelWithoutGravity()// 重力加速度を抜いた加速度（ローパスフィルターを用いたもの、回転によらず重力加速度を除去できるが、追従がとても遅れる）
+    //{
+    //    Vector3 accel = GetAccel();
+
+    //    /* ローパスフィルタ */
+
+    //    float alpha = 0.97f;// アルファ値
+    //    Vector3 accel_NoGravity = Vector3.zero;
+    //    float threshold = 0.05f;// しきい値
+    //    for(int axis = 0; axis < 3; axis++)
+    //    {
+    //        acc_gravity[axis] = (alpha * acc_gravity[axis]) + ((1 - alpha) * accel[axis]);  // 出力値 = a * 前回の出力値 + (1 - a) * センサの値
+    //        accel_NoGravity[axis] = accel[axis] - acc_gravity[axis];                        // 重力の値を除く
+
+    //        if (accel_NoGravity[axis] * accel_NoGravity[axis] < threshold * threshold)
+    //        {
+    //            //accel_NoGravity[axis] = 0f;
+    //            isMoving = false;
+    //        }
+
+    //        float diff_axis = accel_NoGravity[axis] - accel_old[axis];// 前回の値との差分
+    //        float diff_limit = 0.5f;// 差分のフィルターするしきい値
+
+    //        accel_old[axis] = accel_NoGravity[axis];
+    //        if (isMoving && diff_axis * diff_axis > diff_limit)// ブレーキのような挙動を補正
+    //        {
+    //            accel_NoGravity[axis] = 0f;
+    //        }
+
+    //    }
+    //    if (!isMoving && accel_NoGravity.sqrMagnitude > threshold * threshold)
+    //    {
+    //        accel_NoGravity = Vector3.zero;
+    //            isMoving = true;
+    //    }
+    //    //acc_old = acc_g;
+    //    return accel_NoGravity;
+    //}
+
+    public Vector3 GetAccelWithoutGravity()// 重力加速度を抜いた加速度（回転が無い場合はローパスフィルターを用いた場合に比べ反映が早く細かい動きも取れるが、回転が加わると変な方向に引っ張られる）
     {
         Vector3 accel = GetAccel();
+        Quaternion rotation = GetVector();
+        Vector3 rotationVector3 = rotation.eulerAngles;
+        rotationVector3.z = 0f;
 
-        /* ローパスフィルタ */
+        //Vector3 gravity = Vector3.Scale(accel.normalized, up.eulerAngles.normalized * 0.5f);
+        Vector3 gravity = Vector3.Scale(rotationVector3, Vector3.down);
+        Vector3 normalizedGravity = gravity.normalized;
 
-        float alpha = 0.97f;// アルファ値
-        Vector3 accel_NoGravity = Vector3.zero;
-        float threshold = 0.05f;// しきい値
-        for(int axis = 0; axis < 3; axis++)
-        {
-            acc_gravity[axis] = (alpha * acc_gravity[axis]) + ((1 - alpha) * accel[axis]);  // 出力値 = a * 前回の出力値 + (1 - a) * センサの値
-            accel_NoGravity[axis] = accel[axis] - acc_gravity[axis];                        // 重力の値を除く
+        if (gravity.x < 0) normalizedGravity.x *= -1;
+        if (gravity.y < 0) normalizedGravity.y *= -1;
+        if (gravity.z < 0) normalizedGravity.z *= -1;
+        gravity = normalizedGravity;
 
-            if (accel_NoGravity[axis] * accel_NoGravity[axis] < threshold * threshold)
-            {
-                //accel_NoGravity[axis] = 0f;
-                isMoving = false;
-            }
-
-            float diff_axis = accel_NoGravity[axis] - accel_old[axis];// 前回の値との差分
-            float diff_limit = 0.5f;// 差分のフィルターするしきい値
-
-            accel_old[axis] = accel_NoGravity[axis];
-            if (isMoving && diff_axis * diff_axis > diff_limit)// ブレーキのような挙動を補正
-            {
-                accel_NoGravity[axis] = 0f;
-            }
-            
-        }
-        if (!isMoving && accel_NoGravity.sqrMagnitude > threshold * threshold)
-        {
-            accel_NoGravity = Vector3.zero;
-                isMoving = true;
-        }
-        //acc_old = acc_g;
+        Vector3 accel_NoGravity = new Vector3(accel.x - gravity.x, accel.y - gravity.z, accel.z + gravity.y);
+        //Vector3 accel_NoGravity = accel - gravity;
         return accel_NoGravity;
     }
 
