@@ -673,7 +673,7 @@ namespace Mocopi.Receiver
             {
                 human = humanBones,
                 skeleton = skeletonBones,
-                upperArmTwist = 0.5f,
+                upperArmTwist = 1f,
                 lowerArmTwist = 0.5f,
                 upperLegTwist = 0.5f,
                 lowerLegTwist = 0.5f,

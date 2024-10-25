@@ -25,10 +25,7 @@ public class PlayerIKMove : MonoBehaviour
 
     private void OnAnimatorIK(int layerIndex)
     {
-        if (rightHandIkTarget == null) return;
-        if (leftHandIkTarget == null) return;
-        if(rightFootIkTarget == null) return;
-        if(leftFootIkTarget == null) return;
+        if (!CheckIKSet()) return;// IKのポイントが1つでも設定していなければ実行を辞める
 
         /* IKを有効化 */
         // 右手
@@ -57,5 +54,17 @@ public class PlayerIKMove : MonoBehaviour
         // 左足
         animator.SetIKPosition(AvatarIKGoal.LeftFoot, leftFootIkTarget.position);
         animator.SetIKRotation(AvatarIKGoal.LeftFoot, leftFootIkTarget.rotation);
+
+        animator.SetLookAtWeight()
+    }
+
+    bool CheckIKSet()
+    {
+        if (rightHandIkTarget == null) return false;
+        if (leftHandIkTarget == null) return false;
+        if (rightFootIkTarget == null) return false;
+        if (leftFootIkTarget == null) return false;
+
+        return true;
     }
 }
