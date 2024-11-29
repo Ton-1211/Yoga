@@ -276,7 +276,6 @@ namespace Mocopi.Receiver
         /// Application is background
         /// </summary>
         private bool isAppBackground = false;
-
         #endregion --Fields--
 
         #region --Properties--
@@ -329,6 +328,7 @@ namespace Mocopi.Receiver
             this.isSkeletonInitializeReserved = true;
         }
 
+        [Header("腕の上下追加感度"),SerializeField] Vector2 armSensitivity;
         /// <summary>
         /// Update avatar bone information
         /// </summary>
@@ -362,6 +362,23 @@ namespace Mocopi.Receiver
             this.skeletonData.PositionsX = positionsX;
             this.skeletonData.PositionsY = positionsY;
             this.skeletonData.PositionsZ = positionsZ;
+
+            for (int i = 0; i < boneIds.Length; i++)
+            {
+                //if (boneIds[i] == 8)// 首のとき
+                //{
+                //    neckPosition = new Vector2(skeletonData.PositionsX[i], skeletonData.PositionsY[i]);
+                //    //Debug.Log("neckPosition:" + neckPosition);
+                //}
+                if (boneIds[i] == 12 || boneIds[i] == 16)// 左右の上腕だったとき
+                {
+                    //Vector2 difference = new Vector2(skeletonData.PositionsX[i] - neck.position.x, skeletonData.PositionsY[i] - neck.position.y);// 首との差
+                    Vector2 rotation = new Vector2(skeletonData.RotationsX[i], skeletonData.RotationsY[i]);
+                    //skeletonData.RotationsX[i] += rotation.x * armSensitivity.x;
+                    //skeletonData.RotationsY[i] += rotation.y * armSensitivity.y;
+                    Debug.Log("rotation:" + rotation);
+                }
+            }
 
             this.isSkeletonUpdated = true;
 
@@ -445,21 +462,21 @@ namespace Mocopi.Receiver
                 this.isSkeletonInitializeReserved = false;
             }
 
-            if (this.isSkeletonInitialized)
-            {
-                // if the skeleton needs to be updated
-                if (this.isSkeletonUpdated)
-                {
-                    this.InvokeUpdateSkeleton();
-                    this.isSkeletonUpdated = false;
+            //if (this.isSkeletonInitialized)
+            //{
+            //    // if the skeleton needs to be updated
+            //    if (this.isSkeletonUpdated)
+            //    {
+            //        this.InvokeUpdateSkeleton();
+            //        this.isSkeletonUpdated = false;
 
-                    // buffering avatar pose
-                    this.BufferAvatarPose();
-                }
+            //        // buffering avatar pose
+            //        this.BufferAvatarPose();
+            //    }
 
-                // update avatar pose
-                this.UpdateAvatarPose();
-            }
+            //    // update avatar pose
+            //    this.UpdateAvatarPose();
+            //}
         }
 
         /// <summary>
@@ -470,6 +487,18 @@ namespace Mocopi.Receiver
             if (this.isSkeletonInitialized)
             {
                 this.UpdateFrameArrivalRate();
+                    // if the skeleton needs to be updated
+                    if (this.isSkeletonUpdated)
+                    {
+                        this.InvokeUpdateSkeleton();
+                        this.isSkeletonUpdated = false;
+
+                        // buffering avatar pose
+                        this.BufferAvatarPose();
+                    }
+
+                    // update avatar pose
+                    this.UpdateAvatarPose();
             }
         }
 
@@ -714,10 +743,11 @@ namespace Mocopi.Receiver
                 return;
             }
 
+            // これによってAnimator Controllerとの併用が不可能になっていた
             // If there is an AnimatorController, remove it because it interferes with updating the skeleton
             if (this.isRemoveAnimatorControllerOnUpdate && this.Animator.runtimeAnimatorController != null)
             {
-                this.Animator.runtimeAnimatorController = null;
+                //this.Animator.runtimeAnimatorController = null;
             }
 
             for (int i = 0; i < this.skeletonData.BoneIds.Length; i++)
