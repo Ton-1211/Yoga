@@ -40,7 +40,7 @@ public class JSONReader : MonoBehaviour
     void Start()
     {
         player = GameObject.FindWithTag("Player");
-        BossAttack("C:/Users/Ton/Documents/GitHub/Yoga/YogaDevelop/Develop/Yoga/src/Assets/BossAttacks/test2.json");
+        //BossAttack("C:/Users/Ton/Documents/GitHub/Yoga/YogaDevelop/Develop/Yoga/src/Assets/BossAttacks/.json");
     }
 
     // Update is called once per frame

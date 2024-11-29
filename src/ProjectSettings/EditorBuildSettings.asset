@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Prototype.unity
     guid: 0900dc4d596b8da478edd1bf57f9321b
+  - enabled: 1
+    path: Assets/Scenes/Yamaguchi/attack.unity
+    guid: 40a27a4a937bc7840a04705d66aa97ea
   m_configObjects: {}
