@@ -14,8 +14,8 @@ public class AttackBulletScript : MonoBehaviour
     void Start()
     {
         playerManager = FindObjectOfType<PlayerManagerScript>();
-        rb = GetComponent<Rigidbody>();
-        rb.AddForce(transform.forward * 2, ForceMode.Impulse);
+        //rb = GetComponent<Rigidbody>();
+        //rb.AddForce(transform.forward * 2, ForceMode.Impulse);
     }
     void OnTriggerEnter(Collider other)
     {

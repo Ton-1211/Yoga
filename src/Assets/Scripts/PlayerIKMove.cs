@@ -1,14 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]// Animatorコンポーネントが必要
 public class PlayerIKMove : MonoBehaviour
 {
     [Header("右手IK"), SerializeField] Transform rightHandIkTarget;
-    [Header("左手IK"),SerializeField] Transform leftHandIkTarget;
+    [Header("左手IK"), SerializeField] Transform leftHandIkTarget;
     [Header("右足IK"), SerializeField] Transform rightFootIkTarget;
     [Header("左足IK"), SerializeField] Transform leftFootIkTarget;
+    [Header("頭"), SerializeField] Transform head;
+    [Header("尻"), SerializeField] Transform hip;
+    [Header("Mocopiアバター"), SerializeField] Animator mocopiAvatarAnimator;
 
     Animator animator;
     // Start is called before the first frame update
@@ -20,7 +24,7 @@ public class PlayerIKMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void OnAnimatorIK(int layerIndex)
@@ -55,7 +59,13 @@ public class PlayerIKMove : MonoBehaviour
         animator.SetIKPosition(AvatarIKGoal.LeftFoot, leftFootIkTarget.position);
         animator.SetIKRotation(AvatarIKGoal.LeftFoot, leftFootIkTarget.rotation);
 
-        animator.SetLookAtWeight()
+        //Quaternion hipRotate = hip.rotation * Quaternion.Euler(new Vector3(0f, 0f, -90f));
+        //animator.SetBoneLocalRotation(HumanBodyBones.Hips, hipRotate);
+        //SyncBoneRotation(HumanBodyBones.Spine);
+        //SyncBoneRotation(HumanBodyBones.Chest);
+        //SyncBoneRotation(HumanBodyBones.UpperChest);
+        //SyncBoneRotation(HumanBodyBones.Neck);
+        //animator.SetBoneLocalRotation(HumanBodyBones.Head, head.rotation);
     }
 
     bool CheckIKSet()
@@ -66,5 +76,10 @@ public class PlayerIKMove : MonoBehaviour
         if (leftFootIkTarget == null) return false;
 
         return true;
+    }
+
+    void SyncBoneRotation(HumanBodyBones boneType)
+    {
+        //animator.SetBoneLocalRotation(boneType, mocopiAvatarAnimator.GetBoneTransform(boneType).localRotation/* * Quaternion.Euler(new Vector3(0f, 90f, 0f))*/);
     }
 }
