@@ -7,7 +7,9 @@ using UnityEngine;
 public class PlayerIKMove : MonoBehaviour
 {
     [Header("右手IK"), SerializeField] Transform rightHandIkTarget;
+    [Header("右肘IK"), SerializeField] Transform rightElbowTarget;
     [Header("左手IK"), SerializeField] Transform leftHandIkTarget;
+    [Header("左肘IK"), SerializeField] Transform leftElbowIKTarget;
     [Header("右足IK"), SerializeField] Transform rightFootIkTarget;
     [Header("左足IK"), SerializeField] Transform leftFootIkTarget;
     [Header("頭"), SerializeField] Transform head;
@@ -59,6 +61,8 @@ public class PlayerIKMove : MonoBehaviour
         animator.SetIKPosition(AvatarIKGoal.LeftFoot, leftFootIkTarget.position);
         animator.SetIKRotation(AvatarIKGoal.LeftFoot, leftFootIkTarget.rotation);
 
+        animator.SetIKHintPosition(AvatarIKHint.RightElbow, rightElbowTarget.position);
+        animator.SetIKHintPosition(AvatarIKHint.LeftElbow, leftElbowIKTarget.position);
         //Quaternion hipRotate = hip.rotation * Quaternion.Euler(new Vector3(0f, 0f, -90f));
         //animator.SetBoneLocalRotation(HumanBodyBones.Hips, hipRotate);
         //SyncBoneRotation(HumanBodyBones.Spine);
