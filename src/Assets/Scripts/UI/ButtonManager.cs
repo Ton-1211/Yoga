@@ -1,0 +1,13 @@
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using System.Collections;
+
+public class ButtonManager : MonoBehaviour
+{
+    // メインシーンに切り替える関数
+    public void SwitchToPrototype()
+    {
+        SceneManager.LoadScene("Prototype"); // 切り替え先のシーン名
+    }
+}
