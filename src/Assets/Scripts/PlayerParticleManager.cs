@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerParticleManager : MonoBehaviour
 {
-    [SerializeField] List<ParticleSystem> particles = new List<ParticleSystem>();
+    [SerializeField] List<ParticlesPlayer> particles = new List<ParticlesPlayer>();
     // Start is called before the first frame update
     void Start()
     {
@@ -13,10 +13,10 @@ public class PlayerParticleManager : MonoBehaviour
 
     public void PlayParticle(Vector3 attackPosition)
     {
-        ParticleSystem playParticle = new ParticleSystem();
+        ParticlesPlayer playParticle = new ParticlesPlayer();
         float minDistance = 0f;
 
-        foreach(ParticleSystem particle in particles)
+        foreach(ParticlesPlayer particle in particles)
         {
             float distance = Vector3.Distance(attackPosition, particle.transform.position);
             if(minDistance > distance)
