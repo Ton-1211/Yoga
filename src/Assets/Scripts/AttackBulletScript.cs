@@ -10,10 +10,12 @@ public class AttackBulletScript : MonoBehaviour
     [SerializeField] int damage;
     PlayerManagerScript playerManager;
     Rigidbody rb;
+    PlayerParticleManager playerParticleManager;
 
     void Start()
     {
         playerManager = FindObjectOfType<PlayerManagerScript>();
+        playerParticleManager = FindObjectOfType<PlayerParticleManager>();
         //rb = GetComponent<Rigidbody>();
         //rb.AddForce(transform.forward * 2, ForceMode.Impulse);
     }
@@ -23,6 +25,7 @@ public class AttackBulletScript : MonoBehaviour
         {
             // 消去処理（エフェクト発生等も記述）
             playerManager.ObtainAttack(damage);
+            playerParticleManager.PlayParticle(transform.position);
             Destroy(this.gameObject);// オブジェクトの破壊
         }
     }
