@@ -3,13 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using System;
 
-[System.Serializable]
+[Serializable]
+public class Attack// ひとかたまり（発生位置が変化しない）攻撃
+{
+    public List<Vector2> positions = new List<Vector2>();// どの位置に攻撃を飛ばすか
+    public float waitSeconds = 0f;// 攻撃前に待つ時間 
+    public float seconds = 0f;// その位置に何秒攻撃を発生させるか
+    public float judgeInterval = 0.1f;// 判定オブジェクトの間隔
+}
+[Serializable]
+public class AttackListWrap// Jsonで攻撃のリストを扱うためのクラス（こうしないとリストがJsonに書き出されない）
+{
+    public List<Attack> attacks;
+}
+[Serializable]
 public class AttackSet
 {
     public List<AttackData> AttackDatas;
 }
-[System.Serializable]
+[Serializable]
 public class AttackData
 {
     public float spawnTiming;
@@ -27,11 +41,16 @@ public class AttackData
         this.position = position;
     }
 }
-
+[Serializable]
+public class JsonPath
+{
+    [PathAttribute]public string path;
+}
 public class JSONReader : MonoBehaviour
 {
     [SerializeField] GameObject bossAttack;
     [SerializeField] Transform bossAttackParent;
+    [Header("ボスの攻撃Jsonのリスト"), PathAttribute, SerializeField] List<string> bossAttackJsonPaths;
 
     float timer = -1f;
     List<AttackData> attackList = new List<AttackData>();
@@ -63,24 +82,27 @@ public class JSONReader : MonoBehaviour
         }
     }
 
-    public void BossAttack([PathReference] string attackJson)
+    public void BossAttack()
     {
-        AttackSet attacks = LoadAttackJson(attackJson);
+        string attackJson = bossAttackJsonPaths[0];// １番先頭の要素を読み込む
+        List<Attack> attacks = LoadAttackJson(attackJson);
+        AttackSet attackSet = ConvertToAttackSet(attacks);
 
         attackList.Clear();// 念の為リストの中身をなくしている
-        for (int i = 0; i < attacks.AttackDatas.Count; i++)
+        for (int i = 0; i < attackSet.AttackDatas.Count; i++)
         {
-            attackList.Add(attacks.AttackDatas[i]);
+            attackList.Add(attackSet.AttackDatas[i]);
         }
         timer = 0f;
+        attackJson.Remove(0);// リストから読み込んだ要素を削除
     }
-    AttackSet LoadAttackJson(string dataPath)
+    public static List<Attack> LoadAttackJson(string dataPath)
     {
         StreamReader streamReader = new StreamReader(dataPath);
         string dataString = streamReader.ReadToEnd();
         streamReader.Close();
 
-        return JsonUtility.FromJson<AttackSet>(dataString);
+        return JsonUtility.FromJson<AttackListWrap>(dataString).attacks;
     }
 
     void JsonTest()
@@ -96,5 +118,28 @@ public class JSONReader : MonoBehaviour
 
         AttackData data2 = JsonUtility.FromJson<AttackData>(jsonData);
         Debug.Log("data2:" + "spawnTiming:" + data2.spawnTiming + " position:" + data2.position);
+    }
+
+    AttackSet ConvertToAttackSet(List<Attack> attackGroups)
+    {
+        AttackSet attackSet = new AttackSet();
+        float totalSeconds = 0f;
+        List<AttackData> attacks = new List<AttackData>();
+        for (int i = 0; i < attackGroups.Count; i++)
+        {
+            totalSeconds += attackGroups[i].waitSeconds;// 待機時間
+            int judgeNum = (int)(attackGroups[i].seconds / attackGroups[i].judgeInterval);// 判定オブジェクトの個数
+            for (int j = 0; j < judgeNum; j++)
+            {
+                for (int k = 0; k < attackGroups[i].positions.Count; k++)// 攻撃箇所の個数（左右の手足で設定しているぶん）
+                {
+                    attacks.Add(new AttackData(totalSeconds + j * attackGroups[i].judgeInterval, attackGroups[i].positions[k]));
+                }
+            }
+            totalSeconds += attackGroups[i].seconds;
+        }
+
+        attackSet.AttackDatas = attacks;// 判定ごとの攻撃のリストに反映
+        return attackSet;
     }
 }
