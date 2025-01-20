@@ -5,15 +5,19 @@ using UnityEngine;
 public class PlayerManagerScript : MonoBehaviour
 {
     int obtainedDamage;
+    int totalDamage;
 
     public int ObtainedDamage
     {
         get { return obtainedDamage; }
     }
 
+    public int TotalDamage => totalDamage;
+
     void Start()
     {
         obtainedDamage = 0;
+        totalDamage = 0;
     }
 
     /// <summary>
@@ -29,6 +33,10 @@ public class PlayerManagerScript : MonoBehaviour
     /// </summary>
     public void ResetObtainedDamage()
     {
+        if(obtainedDamage > 0)
+        {
+            totalDamage += obtainedDamage;
+        }
         obtainedDamage = 0;
     }
 
