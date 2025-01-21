@@ -96,7 +96,7 @@ public class JSONReader : MonoBehaviour
             attackList.Add(attackSet.AttackDatas[i]);
         }
         timer = 0f;
-        attackJson.Remove(0);// リストから読み込んだ要素を削除
+        bossAttackJsonPaths.Remove(bossAttackJsonPaths[0]);// リストから読み込んだ要素を削除
     }
     public static List<Attack> LoadAttackJson(string dataPath)
     {

@@ -537,7 +537,7 @@ PlayableDirector:
   - key: {fileID: 0}
     value: {fileID: 0}
   - key: {fileID: -2985842772256537106, guid: 66563893983b6414f8aefcf28fe76b1e, type: 2}
-    value: {fileID: 838417993}
+    value: {fileID: 1841592479}
   - key: {fileID: 7163317034696412055, guid: 66563893983b6414f8aefcf28fe76b1e, type: 2}
     value: {fileID: 969467574}
   m_ExposedReferences:
@@ -556,7 +556,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1420442932}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &96913497
 GameObject:
@@ -16476,7 +16476,6 @@ GameObject:
   m_Component:
   - component: {fileID: 838417992}
   - component: {fileID: 838417991}
-  - component: {fileID: 838417993}
   m_Layer: 0
   m_Name: BossAttacks
   m_TagString: Untagged
@@ -16515,36 +16514,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
---- !u!114 &838417993
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 838417990}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Events:
-    m_Signals:
-    - {fileID: 11400000, guid: f8a4b791928d6d640896e552a4b9331b, type: 2}
-    m_Events:
-    - m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 838417991}
-          m_TargetAssemblyTypeName: JSONReader, Assembly-CSharp
-          m_MethodName: BossAttack
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: Assets/BossAttacks/BossAttackTest.json
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!4 &847496105 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4633135706533996733, guid: 18446cdd47bfa5849a970156a4de6889, type: 3}
@@ -28688,6 +28657,87 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a6096f5457f25b647849c402e7b40a6a, type: 3}
+--- !u!1 &1388883892
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1388883893}
+  - component: {fileID: 1388883894}
+  m_Layer: 0
+  m_Name: OpeningTimeLine
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1388883893
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1388883892}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1420442932}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!320 &1388883894
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1388883892}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: 2f1c3659dc6e01a4989196b58a569adc, type: 2}
+  m_InitialState: 1
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: -178378571200102336, guid: 87d025619a93ad34e90815c2a2ce7dde, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -2402003133854269547, guid: 87d025619a93ad34e90815c2a2ce7dde, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 761185200821064054, guid: 87d025619a93ad34e90815c2a2ce7dde, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 2899914645969307601, guid: 87d025619a93ad34e90815c2a2ce7dde, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -5628818092426240222, guid: 87d025619a93ad34e90815c2a2ce7dde, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 414656681270182875, guid: 87d025619a93ad34e90815c2a2ce7dde, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 8853690054404916940, guid: 87d025619a93ad34e90815c2a2ce7dde, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 3258987895420677406, guid: 87d025619a93ad34e90815c2a2ce7dde, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -2899679607379561952, guid: 87d025619a93ad34e90815c2a2ce7dde, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -8911626112995794584, guid: 87d025619a93ad34e90815c2a2ce7dde, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -4278681546982809310, guid: 87d025619a93ad34e90815c2a2ce7dde, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -7283708441593924800, guid: 87d025619a93ad34e90815c2a2ce7dde, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -651915348163723909, guid: 87d025619a93ad34e90815c2a2ce7dde, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -2254754181156126368, guid: 87d025619a93ad34e90815c2a2ce7dde, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -5089570461796901252, guid: 87d025619a93ad34e90815c2a2ce7dde, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -3371186228679406902, guid: 2f1c3659dc6e01a4989196b58a569adc, type: 2}
+    value: {fileID: 1841592479}
+  m_ExposedReferences:
+    m_References: []
 --- !u!1 &1393758704
 GameObject:
   m_ObjectHideFlags: 0
@@ -28757,7 +28807,7 @@ PlayableDirector:
   m_Enabled: 1
   serializedVersion: 3
   m_PlayableAsset: {fileID: 11400000, guid: 561c08ff58420554aa7c5b1d3e0769c3, type: 2}
-  m_InitialState: 1
+  m_InitialState: 0
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
   m_InitialTime: 0
@@ -28782,6 +28832,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1388883893}
   - {fileID: 92337107}
   - {fileID: 1967013791}
   - {fileID: 2033900126}
@@ -45239,6 +45290,7 @@ GameObject:
   - component: {fileID: 1841592476}
   - component: {fileID: 1841592477}
   - component: {fileID: 1841592478}
+  - component: {fileID: 1841592479}
   m_Layer: 0
   m_Name: GameFlowManager
   m_TagString: Untagged
@@ -45287,10 +45339,57 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jsonReader: {fileID: 838417991}
-  damageDisplayUI: {fileID: 0}
-  bossSummonDirector: {fileID: 0}
-  playerAttackDirectors: []
+  playerAttackWaitTime: 10
+  bossSummonDirector: {fileID: 92337106}
+  playerAttackDirectors:
+  - {fileID: 2033900127}
   winDirector: {fileID: 0}
+  state: 0
+--- !u!114 &1841592479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1841592474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: f8a4b791928d6d640896e552a4b9331b, type: 2}
+    - {fileID: 11400000, guid: 09d0713b1ddd5b7498caa25fa5d675ec, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1841592478}
+          m_TargetAssemblyTypeName: GameFlowManager, Assembly-CSharp
+          m_MethodName: ChangeGameFlow
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: Assets/BossAttacks/BossAttackTest.json
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1841592478}
+          m_TargetAssemblyTypeName: GameFlowManager, Assembly-CSharp
+          m_MethodName: ChangeGameFlow
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1001 &1846559761
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -45716,7 +45815,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1420442932}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1972308049 stripped
 Transform:
@@ -46331,7 +46430,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1420442932}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!320 &2033900127
 PlayableDirector:
@@ -46372,6 +46471,10 @@ PlayableDirector:
     value: {fileID: 1160227928}
   - key: {fileID: -6135645799723544994, guid: a01c7936ef96650419949a71b47b3c72, type: 2}
     value: {fileID: 1580659840}
+  - key: {fileID: 6650354841029289224, guid: a01c7936ef96650419949a71b47b3c72, type: 2}
+    value: {fileID: 109523019}
+  - key: {fileID: -5577006430322946935, guid: a01c7936ef96650419949a71b47b3c72, type: 2}
+    value: {fileID: 1841592479}
   m_ExposedReferences:
     m_References:
     - 5335b34baa7c5ee4380f7c16a5977292: {fileID: 655249342}

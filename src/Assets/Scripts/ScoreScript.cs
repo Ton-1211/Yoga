@@ -12,6 +12,8 @@ public class ScoreScript : MonoBehaviour
     int previousValue;
     bool isCountUp;
     Sequence sequence;
+
+    public TextMeshProUGUI ScoreText => scoreText;
     // Start is called before the first frame update
     void Start()
     {
