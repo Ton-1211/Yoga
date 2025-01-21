@@ -55,6 +55,8 @@ public class JSONReader : MonoBehaviour
     float timer = -1f;
     List<AttackData> attackList = new List<AttackData>();
     GameObject player;
+
+    public int RemainBossAttack => bossAttackJsonPaths.Count;
     // Start is called before the first frame update
     void Start()
     {
