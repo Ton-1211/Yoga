@@ -26,6 +26,7 @@ public class GameFlowManager : MonoBehaviour
 
     [SerializeField] GameObject inGameObject;
     [SerializeField] GameObject animationObject;
+    [SerializeField] GameObject inGameUI;
     [SerializeField] JSONReader jsonReader;
     [SerializeField] ScoreScript scoreScript;
     [SerializeField] Image poseImage;
@@ -44,6 +45,7 @@ public class GameFlowManager : MonoBehaviour
         //state = GameState.Opening;
         phaseCounter = 0;
         playerManager = FindObjectOfType<PlayerManagerScript>();
+        inGameUI.SetActive(false);
     }
 
     /// <summary>
@@ -57,6 +59,7 @@ public class GameFlowManager : MonoBehaviour
                 state = GameState.SummonAttack;
                 phaseCounter++;
                 if (!poseImage.gameObject.activeSelf) poseImage.gameObject.SetActive(true);
+                if(!inGameUI.activeSelf) inGameUI.SetActive(true);
                 poseImage.sprite = jsonReader.PoseImage;// 見本のポーズの画像を指定
 
                 if(bossSummonDirector != null) bossSummonDirector.Play();
@@ -68,6 +71,13 @@ public class GameFlowManager : MonoBehaviour
                 break;
 
             case GameState.PlayerAttack:// 敵の攻撃召喚か撃破に移る
+                foreach(PlayableDirector director in playerAttackDirectors)
+                {
+                    if(director.state == PlayState.Playing || director.state == PlayState.Paused)// 再生を止める
+                    {
+                        director.Stop();
+                    }
+                }
                 state = jsonReader.RemainBossAttack != 0 ? GameState.Opening : GameState.BossDefeat;
                 if(state == GameState.Opening)
                 {
@@ -116,6 +126,8 @@ public class GameFlowManager : MonoBehaviour
         state = GameState.PlayerAttack;
         inGameObject.SetActive(false);
         if (poseImage.gameObject.activeSelf) poseImage.gameObject.SetActive(false);
+        if (!animationObject.activeSelf) animationObject.SetActive(true);
+        if (inGameUI.activeSelf) inGameUI.SetActive(false);
 
         int attackMovieIndex = playerAttackDirectors.Count >= phaseCounter ? phaseCounter - 1 : playerAttackDirectors.Count - 1;
         if (playerAttackDirectors.Count != 0) playerAttackDirectors[attackMovieIndex].Play();
