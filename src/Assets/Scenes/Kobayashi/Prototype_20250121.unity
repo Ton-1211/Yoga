@@ -16499,7 +16499,7 @@ MonoBehaviour:
   bossAttack: {fileID: 6614253634632917998, guid: 9733f876802217548ae74711ec8eb738, type: 3}
   bossAttackParent: {fileID: 838417992}
   bossAttackJsonPaths:
-  - Assets/BossAttacks/BossAttackTest.json
+  - Assets/BossAttacks/Pose_5.json
 --- !u!4 &838417992
 Transform:
   m_ObjectHideFlags: 0
