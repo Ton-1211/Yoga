@@ -119,7 +119,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones:
-    - name: body
+    - name: bone_1
       guid: 599ddb6667601c34d91381701cfb66f6
       position: {x: 1381.2646, y: 2039.7579, z: 8}
       rotation: {x: 0, y: 0, z: 0.7163232, w: 0.6977686}
@@ -128,7 +128,7 @@ TextureImporter:
       color:
         serializedVersion: 2
         rgba: 4278190335
-    - name: body1
+    - name: bone_2
       guid: e6d0d4ed353c7d24b8ff8a9033fb361b
       position: {x: 6.300953, y: 78.83107, z: 8}
       rotation: {x: 0, y: -0, z: 0.88545734, w: 0.46472067}
@@ -137,7 +137,7 @@ TextureImporter:
       color:
         serializedVersion: 2
         rgba: 4278255615
-    - name: body3
+    - name: bone_3
       guid: 3afb72a5a47393a4ebc74ff0d9cbda0b
       position: {x: 19.89083, y: -102.08913, z: 8}
       rotation: {x: 0, y: -0, z: -0.91356814, w: 0.40668577}
@@ -146,7 +146,7 @@ TextureImporter:
       color:
         serializedVersion: 2
         rgba: 4278255360
-    - name: head1
+    - name: bone_4
       guid: 24e4c81db68e2fb448a82b13ba822055
       position: {x: 782.66895, y: -9.257467, z: 10}
       rotation: {x: 0, y: 0, z: -0.00077204045, w: 0.9999997}
@@ -155,7 +155,7 @@ TextureImporter:
       color:
         serializedVersion: 2
         rgba: 4294967040
-    - name: head2
+    - name: bone_5
       guid: 1dce6aae3f1d10e48a1f73131476875d
       position: {x: -144.2757, y: 440.84915, z: 9}
       rotation: {x: 0, y: 0, z: -0.017666914, w: 0.99984396}
@@ -164,7 +164,7 @@ TextureImporter:
       color:
         serializedVersion: 2
         rgba: 4294901760
-    - name: arm_F
+    - name: bone_6
       guid: c0be7c1673dc07c4cb38d42415fb8e8a
       position: {x: -331.653, y: 324.12305, z: 9}
       rotation: {x: 0, y: -0, z: -0.7983785, w: 0.602156}
@@ -173,7 +173,7 @@ TextureImporter:
       color:
         serializedVersion: 2
         rgba: 4294902015
-    - name: horn_L
+    - name: bone_7
       guid: 71cd68dbd646acb4cbb71cfe38745b34
       position: {x: 537.74927, y: 752.00806, z: 1}
       rotation: {x: 0, y: 0, z: 0.2974687, w: 0.9547316}
@@ -182,7 +182,7 @@ TextureImporter:
       color:
         serializedVersion: 2
         rgba: 4278223103
-    - name: horn_R
+    - name: bone_8
       guid: 02bfa265813593743a30a79fa7ff7f1d
       position: {x: 479.99078, y: -742.24164, z: 1}
       rotation: {x: 0, y: 0, z: -0.40129298, w: 0.91594976}
@@ -191,7 +191,7 @@ TextureImporter:
       color:
         serializedVersion: 2
         rgba: 4278255488
-    - name: arm_L1
+    - name: bone_9
       guid: 5c5e1f22142894f44893f080fe4a2d7f
       position: {x: 375.5363, y: 475.36667, z: 6}
       rotation: {x: 0, y: -0, z: 0.8364329, w: 0.5480694}
@@ -200,7 +200,7 @@ TextureImporter:
       color:
         serializedVersion: 2
         rgba: 4286643968
-    - name: arm_L2
+    - name: bone_10
       guid: 3593c366be76f404f9371d9b7cf250e6
       position: {x: 554.0036, y: 520.03217, z: 5}
       rotation: {x: 0, y: 0, z: 0.21722008, w: 0.9761227}
@@ -209,7 +209,7 @@ TextureImporter:
       color:
         serializedVersion: 2
         rgba: 4294934528
-    - name: arm_L3
+    - name: bone_11
       guid: 5b9752c01ce54d74fa62041b0448ff88
       position: {x: 529.82526, y: 173.22919, z: 4}
       rotation: {x: 0, y: 0, z: 0.14075899, w: 0.9900439}
@@ -218,7 +218,7 @@ TextureImporter:
       color:
         serializedVersion: 2
         rgba: 4294901888
-    - name: arm_R1
+    - name: bone_12
       guid: f7c5d9ffda44e324389485ea434e59e9
       position: {x: 299.10703, y: -473.67285, z: 6}
       rotation: {x: 0, y: -0, z: -0.87087697, w: 0.49150112}
@@ -227,7 +227,7 @@ TextureImporter:
       color:
         serializedVersion: 2
         rgba: 4286578943
-    - name: arm_R2
+    - name: bone_13
       guid: 22e23a98cb5fb054da09c6553697cbd7
       position: {x: 583.2821, y: -541.7601, z: 5}
       rotation: {x: 0, y: 0, z: -0.23163375, w: 0.97280306}
@@ -236,7 +236,7 @@ TextureImporter:
       color:
         serializedVersion: 2
         rgba: 4278255615
-    - name: arm_R3
+    - name: bone_14
       guid: fa06cfb932731b04fb633319b5f0b414
       position: {x: 514.63934, y: -131.33261, z: 4}
       rotation: {x: 0, y: 0, z: 0.10248718, w: 0.99473435}
@@ -245,7 +245,7 @@ TextureImporter:
       color:
         serializedVersion: 2
         rgba: 4278255360
-    - name: leg_L1
+    - name: bone_15
       guid: bb84043f33e36984b9c804339e706e15
       position: {x: -607.5607, y: 445.84106, z: 3}
       rotation: {x: 0, y: -0, z: 0.9734692, w: 0.22881824}
@@ -254,7 +254,7 @@ TextureImporter:
       color:
         serializedVersion: 2
         rgba: 4294967040
-    - name: leg_R1
+    - name: bone_16
       guid: 9b42cca2a195363479078223c0c41c13
       position: {x: -615.264, y: -398.07684, z: 3}
       rotation: {x: 0, y: -0, z: -0.9807461, w: 0.19528724}
@@ -263,7 +263,7 @@ TextureImporter:
       color:
         serializedVersion: 2
         rgba: 4294901760
-    - name: leg_R2
+    - name: bone_17
       guid: ca3f2baa5d4f0d849aec90957de0e139
       position: {x: 551.19684, y: -141.80646, z: 2}
       rotation: {x: 0, y: 0, z: -0.09325645, w: 0.9956421}
@@ -272,7 +272,7 @@ TextureImporter:
       color:
         serializedVersion: 2
         rgba: 4294902015
-    - name: leg_R3
+    - name: bone_18
       guid: 616143603ef6f704d89c9bfbccb2c5e5
       position: {x: 445.32037, y: 45.065582, z: 1}
       rotation: {x: 0, y: 0, z: 0.16879787, w: 0.9856507}
@@ -281,7 +281,7 @@ TextureImporter:
       color:
         serializedVersion: 2
         rgba: 4278190335
-    - name: leg_L2
+    - name: bone_19
       guid: 982139e527061f749ae2ef84b31ad501
       position: {x: 509.34564, y: 59.49505, z: 2}
       rotation: {x: 0, y: 0, z: 0.0050212326, w: 0.9999874}
@@ -290,7 +290,7 @@ TextureImporter:
       color:
         serializedVersion: 2
         rgba: 4278255488
-    - name: leg_L3
+    - name: bone_20
       guid: 8cbfc0b2eb7b1ec48b4c24d358876a5b
       position: {x: 476.26743, y: 43.659916, z: 1}
       rotation: {x: 0, y: 0, z: -0.03807107, w: 0.999275}
