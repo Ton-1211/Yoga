@@ -93,8 +93,8 @@ public class GameFlowManager : MonoBehaviour
                 break;
 
             case GameState.Result:// リザルト画面
-                //scoreScript.AddScore(playerManager.TotalDamage, true);// スコア表示
-                scoreScript.AddScore(250, true);
+                scoreScript.AddScore(playerManager.TotalDamage, true);// スコア表示
+                //scoreScript.AddScore(250, true);// デバッグで使用した
                 float acculate = jsonReader.PossibleDamage != 0 ? (playerManager.TotalDamage / jsonReader.PossibleDamage) * 100f : 100f;// 精度
                 // 精度によって表示するランクを変更
                 if(acculate >= 90)
@@ -132,5 +132,6 @@ public class GameFlowManager : MonoBehaviour
         int attackMovieIndex = playerAttackDirectors.Count >= phaseCounter ? phaseCounter - 1 : playerAttackDirectors.Count - 1;
         if (playerAttackDirectors.Count != 0) playerAttackDirectors[attackMovieIndex].Play();
         scoreScript.AddScore(playerManager.GetBeamDamage());
+        playerManager.ResetObtainedDamage();
     }
 }

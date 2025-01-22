@@ -9,6 +9,7 @@ public class ScoreScript : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI scoreText;
     [SerializeField] TextMeshProUGUI resultScoreText;
+    [SerializeField] TextMeshProUGUI totalDamageText;
 
     int score;
     int previousValue;
@@ -39,6 +40,7 @@ public class ScoreScript : MonoBehaviour
             {
                 if (!resultScoreText.gameObject.activeSelf) resultScoreText.gameObject.SetActive(true);
                 ShowScoreText(resultScoreText, number);
+                ShowScoreText(totalDamageText, number);
             }
         }
         if(!isCountUp)
@@ -64,8 +66,12 @@ public class ScoreScript : MonoBehaviour
         {
             resultScoreText.enabled = true;
         }
+        if(resultMode && !totalDamageText.enabled)
+        {
+            totalDamageText.enabled = true;
+        }
         previousValue = score;
-        score += point;
+        score = point;
         if(isCountUp)
         {
             sequence.Kill(true);
