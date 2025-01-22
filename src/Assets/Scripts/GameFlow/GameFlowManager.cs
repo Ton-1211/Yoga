@@ -14,7 +14,10 @@ public class GameFlowManager : MonoBehaviour
         Result = 4
     }
 
+    [SerializeField] GameObject inGameObject;
+    [SerializeField] GameObject animationObject;
     [SerializeField] JSONReader jsonReader;
+    [SerializeField] ScoreScript scoreScript;
     [Header("ボスの攻撃生成からプレイヤーの攻撃に移るまでの時間"), SerializeField] float playerAttackWaitTime = 10f;
     [Header("ボスの攻撃召喚ムービーのDirector"), SerializeField] PlayableDirector bossSummonDirector;
     [Header("プレイヤーの攻撃ムービーのDirectorたち"), SerializeField] List<PlayableDirector> playerAttackDirectors;
@@ -22,11 +25,13 @@ public class GameFlowManager : MonoBehaviour
 
     [SerializeField] GameState state = GameState.Opening;
     int phaseCounter;
+    PlayerManagerScript playerManager;
     
     void Start()
     {
         //state = GameState.Opening;
         phaseCounter = 0;
+        playerManager = FindObjectOfType<PlayerManagerScript>();
     }
 
     /// <summary>
@@ -50,6 +55,11 @@ public class GameFlowManager : MonoBehaviour
 
             case GameState.PlayerAttack:// 敵の攻撃召喚か撃破に移る
                 state = jsonReader.RemainBossAttack != 0 ? GameState.Opening : GameState.BossDefeat;
+                if(state == GameState.Opening)
+                {
+                    inGameObject.SetActive(true);
+                    if (animationObject.activeSelf) animationObject.SetActive(false);
+                }
                 ChangeGameFlow();
                 break;
 
@@ -74,7 +84,9 @@ public class GameFlowManager : MonoBehaviour
             yield return null;
         }
         state = GameState.PlayerAttack;
+        inGameObject.SetActive(false);
         int attackMovieIndex = playerAttackDirectors.Count >= phaseCounter ? phaseCounter - 1 : playerAttackDirectors.Count - 1;
         if (playerAttackDirectors.Count != 0) playerAttackDirectors[attackMovieIndex].Play();
+        scoreScript.AddScore(playerManager.GetBeamDamage());
     }
 }
