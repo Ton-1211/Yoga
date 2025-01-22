@@ -12,6 +12,8 @@ public class ScoreScript : MonoBehaviour
     int previousValue;
     bool isCountUp;
     Sequence sequence;
+
+    public TextMeshProUGUI ScoreText => scoreText;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,7 +25,12 @@ public class ScoreScript : MonoBehaviour
     {
         if(isCountUp)
         {
-            scoreText.SetText("{0:0}",previousValue);
+            string number = previousValue.ToString();
+            scoreText.text = "";
+            for(int i = 0; i < number.Length - 1; i++)
+            {
+                scoreText.text += "<sprite=" + number[i] + ">";
+            }
         }
         if(!isCountUp && scoreText.enabled)
         {
