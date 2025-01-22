@@ -58,13 +58,16 @@ public class JSONReader : MonoBehaviour
     float timer = -1f;
     List<AttackData> attackList = new List<AttackData>();
     GameObject player;
+    int possibleDamageMax;
 
     public int RemainBossAttack => bossAttackJsonPaths.Count;
     public Sprite PoseImage => bossAttackJsonPaths[0].poseImage;
+    public int PossibleDamage => possibleDamageMax;
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.FindWithTag("Player");
+        possibleDamageMax = 0;
         //BossAttack("C:/Users/Ton/Documents/GitHub/Yoga/YogaDevelop/Develop/Yoga/src/Assets/BossAttacks/.json");
     }
 
@@ -81,6 +84,7 @@ public class JSONReader : MonoBehaviour
                     GameObject attack = Instantiate(bossAttack, new Vector3(player.transform.position.x + attackList[i].position.x,
                         player.transform.position.y + attackList[i].position.y, player.transform.position.z + attackDistance), Quaternion.identity, bossAttackParent);
                     attack.GetComponent<Rigidbody>().AddForce(bossAttackParent.forward * attackSpeed, ForceMode.Impulse);
+                    possibleDamageMax += attack.GetComponent<AttackBulletScript>().Damage;
 
                     attackList.RemoveAt(i);// リストから削除
                 }

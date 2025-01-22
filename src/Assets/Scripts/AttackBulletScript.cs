@@ -14,6 +14,7 @@ public class AttackBulletScript : MonoBehaviour
     Rigidbody rb;
     PlayerParticleManager playerParticleManager;
 
+    public int Damage => damage;
     void Start()
     {
         playerManager = FindObjectOfType<PlayerManagerScript>();

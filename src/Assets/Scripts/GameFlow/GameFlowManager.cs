@@ -1,9 +1,18 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.UI;
 
+[Serializable]
+public class Rank
+{
+    public Image rankImage;
+    public Sprite s;
+    public Sprite a;
+    public Sprite b;
+}
 public class GameFlowManager : MonoBehaviour
 {
     enum GameState
@@ -24,6 +33,7 @@ public class GameFlowManager : MonoBehaviour
     [Header("ボスの攻撃召喚ムービーのDirector"), SerializeField] PlayableDirector bossSummonDirector;
     [Header("プレイヤーの攻撃ムービーのDirectorたち"), SerializeField] List<PlayableDirector> playerAttackDirectors;
     [Header("ボスの撃破ムービーのDirector"), SerializeField] PlayableDirector winDirector;
+    [SerializeField] Rank rank;
 
     [SerializeField] GameState state = GameState.Opening;
     int phaseCounter;
@@ -40,7 +50,6 @@ public class GameFlowManager : MonoBehaviour
     /// 次のゲーム状態へと移る、基本的にTimelineのシグナルで呼び出したい
     /// </summary>
     public void ChangeGameFlow()
-
     {
         switch(state)
         {
@@ -74,6 +83,22 @@ public class GameFlowManager : MonoBehaviour
                 break;
 
             case GameState.Result:// リザルト画面
+                //scoreScript.AddScore(playerManager.TotalDamage, true);// スコア表示
+                scoreScript.AddScore(250, true);
+                float acculate = jsonReader.PossibleDamage != 0 ? (playerManager.TotalDamage / jsonReader.PossibleDamage) * 100f : 100f;// 精度
+                // 精度によって表示するランクを変更
+                if(acculate >= 90)
+                {
+                    rank.rankImage.sprite = rank.s;
+                }
+                else if(acculate >= 70)
+                {
+                    rank.rankImage.sprite = rank.a;
+                }
+                else
+                {
+                    rank.rankImage.sprite = rank.b;
+                }
                 break;
             default:
                 break;
