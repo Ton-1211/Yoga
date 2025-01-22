@@ -14,12 +14,12 @@ public class PlayerParticleManager : MonoBehaviour
     public void PlayParticle(Vector3 attackPosition)
     {
         ParticlesPlayer playParticle = new ParticlesPlayer();
-        float minDistance = 0f;
+        float? minDistance = null;
 
         foreach(ParticlesPlayer particle in particles)
         {
             float distance = Vector3.Distance(attackPosition, particle.transform.position);
-            if(minDistance > distance)
+            if(minDistance == null || minDistance > distance)
             {
                 minDistance = distance;
                 playParticle = particle;

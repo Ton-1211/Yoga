@@ -3,19 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System.IO;
+using UnityEditor.UIElements;
+using System;
 
 public class BossAttackJSONEditor : EditorWindow
 {
 #if UNITY_EDITOR
-
-    [System.Serializable]
-    class Attack// ひとかたまり（発生位置が変化しない）攻撃
-    {
-        public List<Vector2> positions = new List<Vector2>();// どの位置に攻撃を飛ばすか
-        public float waitSeconds = 0f;// 攻撃前に待つ時間 
-        public float seconds = 0f;// その位置に何秒攻撃を発生させるか
-        public float judgeInterval = 0.1f;// 判定オブジェクトの間隔
-    }
 
     [MenuItem("Tools/攻撃エディター")]
     static void OpenWindow()
@@ -44,11 +37,21 @@ public class BossAttackJSONEditor : EditorWindow
         {
             EditorGUILayout.LabelField("ボスの攻撃を作成します", descriptionStyle);
             EditorGUILayout.Space();
+            EditorGUILayout.LabelField("現在編集中:" + fileName);
 
-            if (GUILayout.Button("攻撃を追加"))
+            using (new EditorGUILayout.HorizontalScope())
             {
-                attackGroups.Add(new Attack());
+                if (GUILayout.Button("新しく攻撃のポーズを追加"))
+                {
+                    attackGroups.Add(new Attack());
+                }
+                if(GUILayout.Button("JSONファイルを編集"))
+                {
+                    LoadJson();
+                }
+                
             }
+
             if (attackGroups.Count > 0)
             {
                 index = EditorGUILayout.IntSlider("インデックス", index, 0, attackGroups.Count - 1, GUILayout.MaxWidth(elementMaxWidth));
@@ -58,6 +61,9 @@ public class BossAttackJSONEditor : EditorWindow
                     if (GUILayout.Button("削除"))
                     {
                         attackGroups.RemoveAt(index);
+                    }
+                    using(var change = new EditorGUI.ChangeCheckScope())
+                    { 
                     }
                 }
                 using (new GUILayout.VerticalScope("Box"))
@@ -109,47 +115,85 @@ public class BossAttackJSONEditor : EditorWindow
 
         if (GUILayout.Button("JSONファイルに書き出し"))
         {
-            ExportJSON();
+            ExportJson();
         }
     }
 
     /// <summary>
     /// JSONファイルへの書き出しを行う
     /// </summary>
-    void ExportJSON()
+    void ExportJson()
     {
         string filePath = Application.dataPath + "/BossAttacks/" + fileName + ".json";// 書き出す場所とファイル名の設定
-
-        AttackSet attackSet = new AttackSet();
-        float totalSeconds = 0f;
-        List<AttackData> attacks = new List<AttackData>();
-        for (int i = 0; i < attackGroups.Count; i++)
+        if(System.IO.File.Exists(filePath))// 同じ名前のファイルが存在していないか
         {
-            totalSeconds += attackGroups[i].waitSeconds;// 待機時間
-            int judgeNum = (int)(attackGroups[i].seconds / attackGroups[i].judgeInterval);// 判定オブジェクトの個数
-            for (int j = 0; j < judgeNum; j++)
+            //Debug.LogWarning("ファイル名が同じです！上書きします...");
+            if(!EditorUtility.DisplayDialog("同名のファイルが既にあります！", "上書き保存しますか？\n" + "（不安なら「キャンセル」してファイルをコピーしておいてください）","はい", "キャンセル"))// 「はい」を押したときのみ上書き保存
             {
-                for (int k = 0; k < attackGroups[i].positions.Count; k++)// 攻撃箇所の個数（左右の手足で設定しているぶん）
-                {
-                    attacks.Add(new AttackData(totalSeconds + j * attackGroups[i].judgeInterval, attackGroups[i].positions[k]));
-                }
+                return;
             }
-            totalSeconds += attackGroups[i].seconds;
+            else Debug.Log("上書き保存します...");
         }
 
-        attackSet.AttackDatas = attacks;// 書き出すクラスに反映
+        //AttackSet attackSet = new AttackSet();
+        //float totalSeconds = 0f;
+        //List<AttackData> attacks = new List<AttackData>();
+        //for (int i = 0; i < attackGroups.Count; i++)
+        //{
+        //    totalSeconds += attackGroups[i].waitSeconds;// 待機時間
+        //    int judgeNum = (int)(attackGroups[i].seconds / attackGroups[i].judgeInterval);// 判定オブジェクトの個数
+        //    for (int j = 0; j < judgeNum; j++)
+        //    {
+        //        for (int k = 0; k < attackGroups[i].positions.Count; k++)// 攻撃箇所の個数（左右の手足で設定しているぶん）
+        //        {
+        //            attacks.Add(new AttackData(totalSeconds + j * attackGroups[i].judgeInterval, attackGroups[i].positions[k]));
+        //        }
+        //    }
+        //    totalSeconds += attackGroups[i].seconds;
+        //}
+
+        //attackSet.AttackDatas = attacks;// 書き出すクラスに反映
+        AttackListWrap attackList = new AttackListWrap();
+        attackList.attacks = attackGroups;
 
         using (FileStream fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
         {
             using (StreamWriter streamWriter = new StreamWriter(fileStream))
             {
-                streamWriter.WriteLine(JsonUtility.ToJson(attackSet));
+                //streamWriter.WriteLine(JsonUtility.ToJson(attackSet));
+                streamWriter.WriteLine(JsonUtility.ToJson(attackList));
                 streamWriter.Flush();
                 streamWriter.Close();
             }
             Debug.Log("書き出し完了! 書き出されたファイルの場所は:" + filePath + "です!");
             fileStream.Close();
         }
+    }
+
+    void LoadJson()
+    {
+        string path = EditorUtility.OpenFilePanel("JSONファイルを選択", "Assets/BossAttacks", "json");
+        if(string.IsNullOrEmpty(path))// ファイルを選択しなかったり、Nullのとき
+        {
+            return;
+        }
+        attackGroups = JSONReader.LoadAttackJson(path);
+        fileName = Path.GetFileNameWithoutExtension(path);
+    }
+
+    /// <summary>
+    /// 攻撃の場所に含まれているか調べる
+    /// </summary>
+    bool CheckAttackPositionIncluded(Attack attack, AttackData attackData)
+    {
+        for(int i = 0; i < attack.positions.Count; i++)
+        {
+            if (attack.positions[i] == attackData.position)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 #endif
 }
