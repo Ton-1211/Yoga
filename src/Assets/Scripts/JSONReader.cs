@@ -44,19 +44,23 @@ public class AttackData
 [Serializable]
 public class JsonPath
 {
-    [PathAttribute]public string path;
+    [PathAttribute, SerializeField]public string path;
+    [Header("ポーズのときに表示する見本の画像"), SerializeField]public Sprite poseImage;
 }
 public class JSONReader : MonoBehaviour
 {
     [SerializeField] GameObject bossAttack;
     [SerializeField] Transform bossAttackParent;
-    [Header("ボスの攻撃Jsonのリスト"), PathAttribute, SerializeField] List<string> bossAttackJsonPaths;
+    [Header("プレイヤーに対する攻撃の発生距離"), SerializeField] float attackDistance = 6f;
+    [Header("ボスの攻撃のスピード"), SerializeField] float attackSpeed = 2f;
+    [Header("ボスの攻撃Jsonのリスト"), SerializeField] List<JsonPath> bossAttackJsonPaths;
 
     float timer = -1f;
     List<AttackData> attackList = new List<AttackData>();
     GameObject player;
 
     public int RemainBossAttack => bossAttackJsonPaths.Count;
+    public Sprite PoseImage => bossAttackJsonPaths[0].poseImage;
     // Start is called before the first frame update
     void Start()
     {
@@ -75,8 +79,8 @@ public class JSONReader : MonoBehaviour
                 if (attackList[i].spawnTiming < timer)
                 {
                     GameObject attack = Instantiate(bossAttack, new Vector3(player.transform.position.x + attackList[i].position.x,
-                        player.transform.position.y + attackList[i].position.y, 0f), Quaternion.identity, bossAttackParent);
-                    attack.GetComponent<Rigidbody>().AddForce(bossAttackParent.forward * 2f, ForceMode.Impulse);
+                        player.transform.position.y + attackList[i].position.y, player.transform.position.z + attackDistance), Quaternion.identity, bossAttackParent);
+                    attack.GetComponent<Rigidbody>().AddForce(bossAttackParent.forward * attackSpeed, ForceMode.Impulse);
 
                     attackList.RemoveAt(i);// リストから削除
                 }
@@ -86,7 +90,7 @@ public class JSONReader : MonoBehaviour
 
     public void BossAttack()
     {
-        string attackJson = bossAttackJsonPaths[0];// １番先頭の要素を読み込む
+        string attackJson = bossAttackJsonPaths[0].path;// １番先頭の要素を読み込む
         List<Attack> attacks = LoadAttackJson(attackJson);
         AttackSet attackSet = ConvertToAttackSet(attacks);
 

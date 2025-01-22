@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.UI;
 
 public class GameFlowManager : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class GameFlowManager : MonoBehaviour
     [SerializeField] GameObject animationObject;
     [SerializeField] JSONReader jsonReader;
     [SerializeField] ScoreScript scoreScript;
+    [SerializeField] Image poseImage;
     [Header("ボスの攻撃生成からプレイヤーの攻撃に移るまでの時間"), SerializeField] float playerAttackWaitTime = 10f;
     [Header("ボスの攻撃召喚ムービーのDirector"), SerializeField] PlayableDirector bossSummonDirector;
     [Header("プレイヤーの攻撃ムービーのDirectorたち"), SerializeField] List<PlayableDirector> playerAttackDirectors;
@@ -45,10 +47,13 @@ public class GameFlowManager : MonoBehaviour
             case GameState.Opening:// 敵の攻撃召喚に移る
                 state = GameState.SummonAttack;
                 phaseCounter++;
+                if (!poseImage.gameObject.activeSelf) poseImage.gameObject.SetActive(true);
+                poseImage.sprite = jsonReader.PoseImage;// 見本のポーズの画像を指定
+
                 if(bossSummonDirector != null) bossSummonDirector.Play();
                 break;
 
-            case GameState.SummonAttack:// プレイヤーの攻撃に移る
+            case GameState.SummonAttack:// 攻撃を生成した後、プレイヤーの攻撃に移る
                 jsonReader.BossAttack();
                 StartCoroutine(WaitAndRunPlayerAttack(playerAttackWaitTime)); // 一定時間後にプレイヤーの攻撃に映る
                 break;
@@ -85,6 +90,8 @@ public class GameFlowManager : MonoBehaviour
         }
         state = GameState.PlayerAttack;
         inGameObject.SetActive(false);
+        if (poseImage.gameObject.activeSelf) poseImage.gameObject.SetActive(false);
+
         int attackMovieIndex = playerAttackDirectors.Count >= phaseCounter ? phaseCounter - 1 : playerAttackDirectors.Count - 1;
         if (playerAttackDirectors.Count != 0) playerAttackDirectors[attackMovieIndex].Play();
         scoreScript.AddScore(playerManager.GetBeamDamage());
