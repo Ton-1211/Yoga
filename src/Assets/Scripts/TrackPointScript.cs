@@ -48,7 +48,8 @@ public class TrackPointScript : MonoBehaviour
                 return;
             }
 
-            trackObject.position = (shoulder.position + hand.position) * 0.5f;// 肩と手の中間点に配置
+            //trackObject.position = (shoulder.position + hand.position) * 0.5f;// 肩と手の中間点に配置
+            trackObject.position = hand.position;
         }
     }
 

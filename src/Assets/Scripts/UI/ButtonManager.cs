@@ -10,4 +10,14 @@ public class ButtonManager : MonoBehaviour
     {
         SceneManager.LoadScene("Prototype"); // 切り替え先のシーン名
     }
+
+    public void SwitchToOpeningScene()
+    {
+        SceneManager.LoadScene("opaning");
+    }
+
+    public void BackToTitle()
+    {
+        SceneManager.LoadScene("Title");
+    }
 }
