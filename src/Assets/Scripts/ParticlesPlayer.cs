@@ -16,7 +16,6 @@ public class ParticlesPlayer : MonoBehaviour
                 particles.Add(particle);
             }
         }
-        Play();
     }
 
     public void Play()

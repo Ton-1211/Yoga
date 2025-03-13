@@ -20,4 +20,12 @@ public class ButtonManager : MonoBehaviour
     {
         SceneManager.LoadScene("Title");
     }
+
+    public void EndProgram()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;// エディター上での再生停止
+#endif
+        Application.Quit();
+    }
 }

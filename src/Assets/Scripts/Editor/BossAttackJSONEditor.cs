@@ -124,7 +124,7 @@ public class BossAttackJSONEditor : EditorWindow
     /// </summary>
     void ExportJson()
     {
-        string filePath = Application.dataPath + "/BossAttacks/" + fileName + ".json";// 書き出す場所とファイル名の設定
+        string filePath = Application.dataPath + "/StreamingAssets/BossAttacks/" + fileName + ".json";// 書き出す場所とファイル名の設定
         if(System.IO.File.Exists(filePath))// 同じ名前のファイルが存在していないか
         {
             //Debug.LogWarning("ファイル名が同じです！上書きします...");
@@ -172,7 +172,7 @@ public class BossAttackJSONEditor : EditorWindow
 
     void LoadJson()
     {
-        string path = EditorUtility.OpenFilePanel("JSONファイルを選択", "Assets/BossAttacks", "json");
+        string path = EditorUtility.OpenFilePanel("JSONファイルを選択", "Assets/StreamingAssets/BossAttacks", "json");
         if(string.IsNullOrEmpty(path))// ファイルを選択しなかったり、Nullのとき
         {
             return;

@@ -44,8 +44,12 @@ public class AttackData
 [Serializable]
 public class JsonPath
 {
-    [PathAttribute, SerializeField]public string path;
-    [Header("ポーズのときに表示する見本の画像"), SerializeField]public Sprite poseImage;
+    //#if UNITY_EDITOR
+    //    [PathAttribute]// エディターの機能を使用しているのでビルド時に属性を除外しようとしたが、ビルドエラーが起きるのでコメントアウト
+    //    [SerializeField] public string path;
+    //#endif
+    [SerializeField] public string path;
+    [Header("ポーズのときに表示する見本の画像"), SerializeField] public Sprite poseImage;
 }
 public class JSONReader : MonoBehaviour
 {
@@ -57,7 +61,7 @@ public class JSONReader : MonoBehaviour
 
     float timer = -1f;
     List<AttackData> attackList = new List<AttackData>();
-    GameObject player;
+    [SerializeField] GameObject player;
     int possibleDamageMax;
 
     public int RemainBossAttack => bossAttackJsonPaths.Count;
@@ -66,7 +70,7 @@ public class JSONReader : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindWithTag("Player");
+        //player = GameObject.FindWithTag("Player");
         possibleDamageMax = 0;
         //BossAttack("C:/Users/Ton/Documents/GitHub/Yoga/YogaDevelop/Develop/Yoga/src/Assets/BossAttacks/.json");
     }
@@ -94,7 +98,7 @@ public class JSONReader : MonoBehaviour
 
     public void BossAttack()
     {
-        string attackJson = bossAttackJsonPaths[0].path;// １番先頭の要素を読み込む
+        string attackJson = Application.streamingAssetsPath + "/" + bossAttackJsonPaths[0].path;// １番先頭の要素を読み込む
         List<Attack> attacks = LoadAttackJson(attackJson);
         AttackSet attackSet = ConvertToAttackSet(attacks);
 
