@@ -25,6 +25,11 @@ public class PathAttributeDrawer : PropertyDrawer
         if(dropObjectList.Count > 0)// オブジェクトがドロップされたとき
         {
             property.stringValue = AssetDatabase.GetAssetPath(dropObjectList[0]);
+            string removeString = "Assets/StreamingAssets/";
+            if(property.stringValue.Substring(0, removeString.Length) == removeString)// "Assets/"が先頭にあったとき
+            {
+                property.stringValue = property.stringValue.Remove(0, removeString.Length);// "Assets/"を削除
+            }
         }
 
         GUI.Label(position, property.displayName + "：" + property.stringValue);// 現在設定されているパスを表示
