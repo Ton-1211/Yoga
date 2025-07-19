@@ -26,6 +26,7 @@ public class AttackBulletScript : MonoBehaviour
     }
     void FixedUpdate()
     {
+        // 攻撃の予測地点を表示
         Ray ray = new Ray(transform.position, -transform.forward);
         RaycastHit hit;
         if(Physics.Raycast(ray, out hit, minPreditionDistance, LayerMask.GetMask("PreditionPanel")))
