@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+// ===============================================================
+// 古いバージョン、現在は「GameFlow->GameFlowManager.cs」になっている
+// ===============================================================
+
 public class GameFlowManagerScript : MonoBehaviour
 {
     enum GameState
@@ -17,7 +21,7 @@ public class GameFlowManagerScript : MonoBehaviour
     [SerializeField] GameObject enemyAttackPrefab;
     [Header("敵の攻撃を発生させる場所"), SerializeField] List<Transform> attackSpawnPoints;
 
-    [SerializeField]GameState gameState;
+    [SerializeField] GameState gameState;
     PlayerManagerScript playerManager;
     ScoreScript scoreScript;
     void Start()
@@ -28,7 +32,7 @@ public class GameFlowManagerScript : MonoBehaviour
 
     void Update()
     {
-        
+
     }
 
     private void OnValidate()
@@ -38,9 +42,9 @@ public class GameFlowManagerScript : MonoBehaviour
 
     public void OnChangeGameState(InputAction.CallbackContext context)
     {
-        if(context.phase == InputActionPhase.Started)
+        if (context.phase == InputActionPhase.Started)
         {
-            switch(gameState)
+            switch (gameState)
             {
                 case GameState.Start:
                     ChangeGameState(GameState.BossAttack);
@@ -64,7 +68,7 @@ public class GameFlowManagerScript : MonoBehaviour
     void ChangeGameState(GameState state)
     {
         gameState = state;
-        switch(state)
+        switch (state)
         {
             case GameState.Start:
                 break;
@@ -93,12 +97,12 @@ public class GameFlowManagerScript : MonoBehaviour
         bossAnimator.SetBool("EnemyAttack", false);
         gameState = GameState.Drain;
     }
-    
+
     IEnumerator DamageBoss()
     {
         bossAnimator.SetBool("Diagonal", true);
         yield return new WaitForSeconds(1f);
-        
+
         int damage = playerManager.GetBeamDamage();
         scoreScript.AddScore(damage);
 
