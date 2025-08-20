@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class PlayerManagerScript : MonoBehaviour
 {
+    const float DefaultDamageMagnification = 1f;
+
     int obtainedDamage;
     int totalDamage;
 
-    public int ObtainedDamage
-    {
-        get { return obtainedDamage; }
-    }
+    public int ObtainedDamage => obtainedDamage;
 
     public int TotalDamage => totalDamage;
 
@@ -40,10 +39,12 @@ public class PlayerManagerScript : MonoBehaviour
         obtainedDamage = 0;
     }
 
-    public int GetBeamDamage(float damageMagnification = 1f)
+    // ビームのダメージを取得
+    public int GetBeamDamage(float damageMagnification = DefaultDamageMagnification)
     {
         return (int)(obtainedDamage * damageMagnification);
     }
+    // ビームのダメージを取得（追加でダメージを加算する場合）
     public int GetBeamDamage(float damageMagnification, int addDamage)
     {
         return (int)(obtainedDamage * damageMagnification) + addDamage;

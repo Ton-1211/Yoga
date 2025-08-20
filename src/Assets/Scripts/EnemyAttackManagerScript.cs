@@ -7,7 +7,7 @@ public class EnemyAttackManagerScript : MonoBehaviour
     // joyconのトラッキングができたらこちらに変更
     // [SerializeField] TrackManagerScript trackManager;
     [SerializeField] Transform[] ikPoints;// 仮置き
-    
+
     public GameObject GetNearestTrackPoint(Transform from)
     {
         GameObject nearest = null;
@@ -26,10 +26,10 @@ public class EnemyAttackManagerScript : MonoBehaviour
         //}
 
         // 仮置き
-        foreach(Transform t in ikPoints)
+        foreach (Transform t in ikPoints)
         {
             distance = (from.position - t.position).sqrMagnitude;
-            if(minDistance > distance)
+            if (minDistance > distance)
             {
                 nearest = t.gameObject;
                 minDistance = distance;

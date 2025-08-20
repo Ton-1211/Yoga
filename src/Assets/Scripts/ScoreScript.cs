@@ -7,6 +7,9 @@ using Unity.VisualScripting;
 
 public class ScoreScript : MonoBehaviour
 {
+    const int InitPreviousValue = 0;
+    const float DisableTextTime = 3f;
+    const float AppendIntervalTime = 0.1f;
     [SerializeField] TextMeshProUGUI scoreText;
     [SerializeField] TextMeshProUGUI resultScoreText;
     [SerializeField] TextMeshProUGUI totalDamageText;
@@ -19,38 +22,39 @@ public class ScoreScript : MonoBehaviour
     DG.Tweening.Sequence sequence;
 
     public TextMeshProUGUI ScoreText => scoreText;
-    // Start is called before the first frame update
+    
     void Start()
     {
         isResult = false;
-        previousValue = 0;
+        previousValue = InitPreviousValue;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if(isCountUp)
         {
             number = previousValue.ToString();
+            // リザルト以外のとき（ゲーム中）
             if (!isResult)
             {
-                ShowScoreText(scoreText, number);
+                ShowScoreText(scoreText, number);// 吸収したダメージ量を表示
             }
+            // リザルトのとき
             else
             {
-                if (!resultScoreText.gameObject.activeSelf) resultScoreText.gameObject.SetActive(true);
+                if (!resultScoreText.gameObject.activeSelf) resultScoreText.gameObject.SetActive(true);// スコアオブジェクトを表示
+
+                // スコア表示
                 ShowScoreText(resultScoreText, number);
                 ShowScoreText(totalDamageText, number);
             }
         }
         if(!isCountUp)
         {
-            //Debug.Log("previousValue:" + previousValue);
-            //Debug.Log("number:" + number);
             previousValue = 0;
             if (scoreText.enabled)
             {
-                StartCoroutine(DisableText(3f));
+                StartCoroutine(DisableText(DisableTextTime));
             }
         }
     }
@@ -84,20 +88,26 @@ public class ScoreScript : MonoBehaviour
         isCountUp = true;
         sequence = DOTween.Sequence().Append(DOTween.To(() => previousValue, num => previousValue = num, score, 0.5f))// アニメーションの設定
             // 少し待機してから
-            .AppendInterval(0.1f)
+            .AppendInterval(AppendIntervalTime)
             // スコア表示の更新を停止
             .AppendCallback(() => isCountUp = false);
     }
 
+    // スコアテキストを表示（フォントではなくスプライトの数字を使用）
     void ShowScoreText(TextMeshProUGUI targetText, string numberString)
     {
         targetText.text = "";
         for (int i = 0; i < numberString.Length; i++)
         {
-            targetText.text += "<sprite=" + numberString[i] + ">";
+            targetText.text += "<sprite=" + numberString[i] + ">";// スプライトの数字を用いたスコアの表示
         }
     }
 
+    /// <summary>
+    /// テキストを指定時間後に非表示にする
+    /// </summary>
+    /// <param name="disableTime">非表示にするまでの時間</param>
+    /// <returns>処理完了までのコルーチン</returns>
     IEnumerator DisableText(float disableTime)
     {
         yield return new WaitForSeconds(disableTime);

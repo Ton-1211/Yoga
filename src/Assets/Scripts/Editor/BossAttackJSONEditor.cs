@@ -10,6 +10,16 @@ public class BossAttackJSONEditor : EditorWindow
 {
 #if UNITY_EDITOR
 
+    const float ElementMaxWidth = 480f;
+    const float DefaultX = 0f;
+    const float DefaultY = 0f;
+    const float DefaultMaxWaitSeconds = 10f;
+    const float DefaultMaxSeconds = 0f;
+    const float DefaultMaxInterval = 0f;
+
+    const int FontSize = 16;
+    static readonly Vector2 DefaultPosition = (0, 0);
+
     [MenuItem("Tools/攻撃エディター")]
     static void OpenWindow()
     {
@@ -20,18 +30,18 @@ public class BossAttackJSONEditor : EditorWindow
     List<Attack> attackGroups = new List<Attack>();// ひとかたまりの攻撃のList
     string fileName;// 保存する名前
 
-    float elementMaxWidth = 480f;// 要素の幅の最大値
+    float elementMaxWidth = ElementMaxWidth;// 要素の幅の最大値
 
     /* OnGUIは毎フレーム呼ばれるため念の為ここで宣言している */
-    float x = 0f;
-    float y = 0f;
-    float maxWaitSeconds = 10f;
-    float maxSeconds = 10f;
-    float maxInterval = 10f;
+    float x = DefaultX;
+    float y = DefaultY;
+    float maxWaitSeconds = DefaultMaxWaitSeconds;
+    float maxSeconds = DefaultMaxSeconds;
+    float maxInterval = DefaultMaxInterval;
     void OnGUI()
     {
         GUIStyle descriptionStyle = new GUIStyle(EditorStyles.label);// 他のラベルに影響させないためコピーしている
-        descriptionStyle.fontSize = 16;
+        descriptionStyle.fontSize = FontSize;
         descriptionStyle.fontStyle = FontStyle.Bold;
         using (new EditorGUILayout.VerticalScope())
         {
@@ -70,7 +80,7 @@ public class BossAttackJSONEditor : EditorWindow
                 {
                     if (GUILayout.Button("場所を追加"))
                     {
-                        attackGroups[index].positions.Add(new Vector2(0, 0));
+                        attackGroups[index].positions.Add(DefaultPosition);
                     }
 
                     if (attackGroups[index].positions.Count > 0)
@@ -120,14 +130,13 @@ public class BossAttackJSONEditor : EditorWindow
     }
 
     /// <summary>
-    /// JSONファイルへの書き出しを行う
+    /// Jsonファイルへの書き出しを行う
     /// </summary>
     void ExportJson()
     {
         string filePath = Application.dataPath + "/StreamingAssets/BossAttacks/" + fileName + ".json";// 書き出す場所とファイル名の設定
         if(System.IO.File.Exists(filePath))// 同じ名前のファイルが存在していないか
         {
-            //Debug.LogWarning("ファイル名が同じです！上書きします...");
             if(!EditorUtility.DisplayDialog("同名のファイルが既にあります！", "上書き保存しますか？\n" + "（不安なら「キャンセル」してファイルをコピーしておいてください）","はい", "キャンセル"))// 「はい」を押したときのみ上書き保存
             {
                 return;
@@ -135,33 +144,15 @@ public class BossAttackJSONEditor : EditorWindow
             else Debug.Log("上書き保存します...");
         }
 
-        //AttackSet attackSet = new AttackSet();
-        //float totalSeconds = 0f;
-        //List<AttackData> attacks = new List<AttackData>();
-        //for (int i = 0; i < attackGroups.Count; i++)
-        //{
-        //    totalSeconds += attackGroups[i].waitSeconds;// 待機時間
-        //    int judgeNum = (int)(attackGroups[i].seconds / attackGroups[i].judgeInterval);// 判定オブジェクトの個数
-        //    for (int j = 0; j < judgeNum; j++)
-        //    {
-        //        for (int k = 0; k < attackGroups[i].positions.Count; k++)// 攻撃箇所の個数（左右の手足で設定しているぶん）
-        //        {
-        //            attacks.Add(new AttackData(totalSeconds + j * attackGroups[i].judgeInterval, attackGroups[i].positions[k]));
-        //        }
-        //    }
-        //    totalSeconds += attackGroups[i].seconds;
-        //}
-
-        //attackSet.AttackDatas = attacks;// 書き出すクラスに反映
         AttackListWrap attackList = new AttackListWrap();
         attackList.attacks = attackGroups;
 
+        // Jsonファイルへの書き出し部分
         using (FileStream fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
         {
             using (StreamWriter streamWriter = new StreamWriter(fileStream))
             {
-                //streamWriter.WriteLine(JsonUtility.ToJson(attackSet));
-                streamWriter.WriteLine(JsonUtility.ToJson(attackList));
+                streamWriter.WriteLine(JsonUtility.ToJson(attackList));// Json形式に変換、書き込み
                 streamWriter.Flush();
                 streamWriter.Close();
             }
@@ -170,13 +161,18 @@ public class BossAttackJSONEditor : EditorWindow
         }
     }
 
+    /// <summary>
+    /// Jsonファイルを読み込む
+    /// </summary>
     void LoadJson()
     {
         string path = EditorUtility.OpenFilePanel("JSONファイルを選択", "Assets/StreamingAssets/BossAttacks", "json");
         if(string.IsNullOrEmpty(path))// ファイルを選択しなかったり、Nullのとき
         {
-            return;
+            return;// 何も行わない
         }
+
+        // 読み込んだJsonファイルから設定を反映
         attackGroups = JSONReader.LoadAttackJson(path);
         fileName = Path.GetFileNameWithoutExtension(path);
     }
@@ -188,11 +184,14 @@ public class BossAttackJSONEditor : EditorWindow
     {
         for(int i = 0; i < attack.positions.Count; i++)
         {
+            // 含まれていたとき
             if (attack.positions[i] == attackData.position)
             {
                 return true;
             }
         }
+
+        // 含まれていないとき
         return false;
     }
 #endif
