@@ -24,6 +24,10 @@ public class GameFlowManager : MonoBehaviour
         Result = 4
     }
 
+    const float  PercentFactor= 100f;
+    const float AcculateRankS = 90f;
+    const float AcculateRankA = 70f;
+
     [SerializeField] GameObject inGameObject;
     [SerializeField] GameObject animationObject;
     [SerializeField] GameObject inGameUI;
@@ -100,13 +104,13 @@ public class GameFlowManager : MonoBehaviour
             case GameState.Result:// リザルト画面
                 scoreScript.AddScore(playerManager.TotalDamage, true);// スコア表示
                 //scoreScript.AddScore(250, true);// デバッグで使用した
-                float acculate = jsonReader.PossibleDamage != 0 ? (playerManager.TotalDamage / jsonReader.PossibleDamage) * 100f : 100f;// 精度
+                float acculate = jsonReader.PossibleDamage != 0 ? (playerManager.TotalDamage / jsonReader.PossibleDamage) * PercentFactor : PercentFactor;// 精度
                 // 精度によって表示するランクを変更
-                if(acculate >= 90)
+                if(acculate >= AcculateRankS)
                 {
                     rank.rankImage.sprite = rank.s;// Sランク表示
                 }
-                else if(acculate >= 70)
+                else if(acculate >= AcculateRankA)
                 {
                     rank.rankImage.sprite = rank.a;// Aランク表示
                 }

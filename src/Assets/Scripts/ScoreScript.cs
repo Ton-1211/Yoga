@@ -9,6 +9,7 @@ public class ScoreScript : MonoBehaviour
 {
     const int InitPreviousValue = 0;
     const float DisableTextTime = 3f;
+    const float ShowTime = 0.5f;
     const float AppendIntervalTime = 0.1f;
     [SerializeField] TextMeshProUGUI scoreText;
     [SerializeField] TextMeshProUGUI resultScoreText;
@@ -86,7 +87,7 @@ public class ScoreScript : MonoBehaviour
     void CountUpAnim()
     {
         isCountUp = true;
-        sequence = DOTween.Sequence().Append(DOTween.To(() => previousValue, num => previousValue = num, score, 0.5f))// アニメーションの設定
+        sequence = DOTween.Sequence().Append(DOTween.To(() => previousValue, num => previousValue = num, score, ShowTime))// アニメーションの設定
             // 少し待機してから
             .AppendInterval(AppendIntervalTime)
             // スコア表示の更新を停止
