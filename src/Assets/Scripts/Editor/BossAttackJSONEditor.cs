@@ -18,7 +18,7 @@ public class BossAttackJSONEditor : EditorWindow
     const float DefaultMaxInterval = 0f;
 
     const int FontSize = 16;
-    const Vector2 DefaultPosition = (0, 0);
+    static readonly Vector2 DefaultPosition = (0, 0);
 
     [MenuItem("Tools/攻撃エディター")]
     static void OpenWindow()
